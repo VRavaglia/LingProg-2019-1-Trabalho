@@ -8,3 +8,5 @@ CMakeLists\.txt
 cmake-build-debug-cygwin/
 
 _Deparsed_XSubs\.pm
+
+main\.exe

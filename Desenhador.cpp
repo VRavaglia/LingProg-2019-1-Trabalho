@@ -30,15 +30,23 @@ vector <vector <char>> Sprite::getSprite() {
     return sprite;
 }
 
+Sprite::Sprite() {
+    vector <vector <char>> pixel = {{' '}};
+    setSprite(pixel);
+    x = 0;
+    y = 0;
+    z = 0;
+}
+
 Sprite::Sprite(string &arquivo, int x_, int y_, int z_) {
-    Sprite::setSprite(arquivo);
+    setSprite(arquivo);
     x = x_;
     y = y_;
     z = z_;
 }
 
 Sprite::Sprite(vector <vector <char>> &sprite, int x_, int y_, int z_) {
-    Sprite::setSprite(sprite);
+    setSprite(sprite);
     x = x_;
     y = y_;
     z = z_;
@@ -60,6 +68,7 @@ size_t Sprite::H() {
 
 void ListaSprites::addSprite(Sprite &sprite) {
     sprites.push_back(sprite);
+    ordenaSpritesPorZ();
 }
 
 std::vector<Sprite> ListaSprites::getSprites() {
@@ -130,7 +139,10 @@ void Desenhador::desenha(ListaSprites &sprites, Tela &tela) {
         Sprite sprite = sprites.getSprites()[i];
         for (size_t x = 0; x < sprite.L(); ++x) {
             for (size_t y = 0; y < sprite.H(); ++y) {
-                tela.setPixel(x + sprite.x,y + sprite.y, sprite.getSprite()[x][y]);
+                char pixel = sprite.getSprite()[x][y];
+                if (pixel != ' '){
+                    tela.setPixel(x + sprite.x,y + sprite.y, pixel);
+                }
             }
         }
     }
