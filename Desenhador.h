@@ -12,9 +12,17 @@ class Sprite{
 public:
     ///Cria um sprite a partir de um arquivo texto, posições no espaço (x e y) e ordem em que vai ser desenhado (profundidade z)
     Sprite(std::string &arquivo, int x, int y, int z);
+    Sprite(std::vector <std::vector <char>> &sprite, int x, int y, int z);
 
-    ///Armazena a matriz de char
-    std::vector <std::vector <char>> sprite;
+    void setSprite(std::vector <std::vector <char>> &sprite);
+    void setSprite(std::string &arquivo);
+    std::vector <std::vector <char>> getSprite();
+
+    /// Retorna a largura
+    size_t L();
+
+    /// Retorna a altura
+    size_t H();
 
     ///Posição horizontal
     int x;
@@ -26,8 +34,16 @@ public:
     int z;
 
 private:
+    /// Armazena a largura
+    size_t l;
+    /// Armazena a altura
+    size_t h;
+
     ///Le um arquivo texto contendo a informação visual do sprite e converte para uma matriz de caracteres
     std::vector <std::vector <char>> arquivoParaSprite(std::string &arquivo);
+
+    ///Armazena a matriz de char
+    std::vector <std::vector <char>> sprite;
 };
 
 /// Contém uma lista de sprites (batch) que serão desenhados na tela

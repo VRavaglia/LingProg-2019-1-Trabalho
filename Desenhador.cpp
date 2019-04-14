@@ -1,10 +1,11 @@
 #include "Desenhador.h"
 #include <algorithm>
 #include <iostream>
+
 using namespace std;
 
-const size_t maxX = 100;
-const size_t maxY = 100;
+const size_t maxX = 80;
+const size_t maxY = 16;
 
 
 // Compara a dimensão z ou profundidade dos sprites para ordena-los
@@ -15,8 +16,29 @@ struct {
     }
 } spriteLessZ;
 
-Sprite::Sprite(string &arquivo, int x_, int y_, int z_) {
+void Sprite::setSprite(vector <vector <char>> &sprite_) {
+    l = sprite_.size();
+    h = sprite_[0].size();
+    sprite = sprite_;
+}
+
+void Sprite::setSprite(std::string &arquivo) {
     sprite = Sprite::arquivoParaSprite(arquivo);
+}
+
+vector <vector <char>> Sprite::getSprite() {
+    return sprite;
+}
+
+Sprite::Sprite(string &arquivo, int x_, int y_, int z_) {
+    Sprite::setSprite(arquivo);
+    x = x_;
+    y = y_;
+    z = z_;
+}
+
+Sprite::Sprite(vector <vector <char>> &sprite, int x_, int y_, int z_) {
+    Sprite::setSprite(sprite);
     x = x_;
     y = y_;
     z = z_;
@@ -27,6 +49,14 @@ vector <vector <char>> Sprite::arquivoParaSprite(string &arquivo){
     //Ler arquivo texto e converter para uma matriz de caracteres
     return spriteNovo;
 };
+
+size_t Sprite::L() {
+    return l;
+}
+
+size_t Sprite::H() {
+    return h;
+}
 
 void ListaSprites::addSprite(Sprite &sprite) {
     sprites.push_back(sprite);
@@ -42,19 +72,25 @@ void ListaSprites::ordenaSpritesPorZ() {
 }
 
 Tela::Tela() {
-    // Inicializa a matriz de caracteres (evitar re-alocação)
-    tela.reserve(maxX);
-    for (size_t i = 0; i < tela.size(); ++i) {
-        tela[i].reserve(maxY);
+    // Inicializa a matriz de caracteres
+    for (size_t x = 0; x < Tela::L(); ++x) {
+        size_t H = Tela::H();
+        vector <char> coluna;
+        coluna.reserve(maxY);
+        tela.push_back(coluna);
+        for (size_t y = 0; y < Tela::L(); ++y) {
+            tela[x].push_back(' ');
+        }
+
     }
 }
 
 size_t Tela::H() {
-    return tela.size();
+    return maxY;
 }
 
 size_t Tela::L() {
-    return tela[0].size();
+    return maxX;
 }
 
 void Tela::setPixel(size_t x, size_t y, char pixel) {
@@ -67,20 +103,19 @@ char Tela::getPixel(size_t x, size_t y) {
 
 void Tela::limpa() {
     //Itera na matriz preenchendo-a com ' '
-    for (size_t i = 0; i < Tela::H(); ++i) {
-        size_t comprimento = Tela::L();
-        for (size_t j = 0; j < comprimento; ++j) {
-            Tela::setPixel(i, j, ' ');
+    for (size_t x = 0; x < Tela::L(); ++x) {
+        size_t H = Tela::H();
+        for (size_t y = 0; y < H; ++y) {
+            Tela::setPixel(x, y, ' ');
         }
     }
 }
 
 void Desenhador::escreveTela(Tela &tela) {
     // Imprime os caracteres da tela no console
-    for (size_t i = 0; i < tela.H(); ++i) {
-        size_t L = tela.L();
-        for (size_t j = 0; j < L; ++j) {
-            cout << tela.getPixel(i,j);
+    for (size_t y = 0; y < tela.H(); ++y) {
+        for (size_t x = 0; x < tela.L(); ++x) {
+            cout << tela.getPixel(x,y);
         }
         cout << endl;
     }
@@ -92,8 +127,14 @@ void Desenhador::desenha(ListaSprites &sprites, Tela &tela) {
 
     // Adiciona as informações de cada sprite na tela
     for (size_t i = 0; i < tamanhoLista; ++i) {
-        //Adiciona os caracteres do sprite a tela
+        Sprite sprite = sprites.getSprites()[i];
+        for (size_t x = 0; x < sprite.L(); ++x) {
+            for (size_t y = 0; y < sprite.H(); ++y) {
+                tela.setPixel(x + sprite.x,y + sprite.y, sprite.getSprite()[x][y]);
+            }
+        }
     }
+    system("clear");
     escreveTela(tela);
 }
 
