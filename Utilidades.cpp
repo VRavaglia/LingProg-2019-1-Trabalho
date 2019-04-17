@@ -25,5 +25,5 @@ bool isNumber(T num){
 template<typename T>
 vec2<T>::vec2(T x_, T y_) {
     x = x_;
-    y= y_;
+    y = y_;
 }

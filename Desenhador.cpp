@@ -1,4 +1,5 @@
 #include "Desenhador.h"
+#include <math.h>
 #include <algorithm>
 #include <iostream>
 
@@ -38,14 +39,14 @@ Sprite::Sprite() {
     z = 0;
 }
 
-Sprite::Sprite(string &arquivo, int x_, int y_, int z_) {
+Sprite::Sprite(string &arquivo, float x_, float y_, int z_) {
     setSprite(arquivo);
     x = x_;
     y = y_;
     z = z_;
 }
 
-Sprite::Sprite(vector <vector <char>> &sprite, int x_, int y_, int z_) {
+Sprite::Sprite(vector <vector <char>> &sprite, float x_, float y_, int z_) {
     setSprite(sprite);
     x = x_;
     y = y_;
@@ -141,7 +142,7 @@ void Desenhador::desenha(ListaSprites &sprites, Tela &tela) {
             for (size_t y = 0; y < sprite.H(); ++y) {
                 char pixel = sprite.getSprite()[x][y];
                 if (pixel != ' '){
-                    tela.setPixel(x + sprite.x,y + sprite.y, pixel);
+                    tela.setPixel(round(x) + sprite.x, round(y) + sprite.y, pixel);
                 }
             }
         }

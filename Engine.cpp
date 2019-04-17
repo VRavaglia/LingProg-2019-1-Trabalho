@@ -1,4 +1,5 @@
 #include "Engine.h"
+#include "Utilidades.h"
 #include <vector>
 #include <ctime>
 #include <unistd.h>
@@ -30,9 +31,14 @@ void Engine::jogo() {
 
     Sprite sprite1(box, 10, 10, 2);
     Sprite sprite2(triangle, 12, 10, 1);
+
+    Entidade cubo;
+    cubo.sprite = sprite1;
+    cubo.velocidade = vec2<float>(1,0);
+
     Tela tela;
     ListaSprites batch;
-    batch.addSprite(sprite1);
+    batch.addSprite(cubo.sprite);
     batch.addSprite(sprite2);
 
     unsigned periodo = (unsigned int)(10E5/frequencia);
@@ -54,6 +60,15 @@ void Engine::jogo() {
     }
 }
 
+void Engine::addEntidade(Entidade &entidade) {
+    entidades.push_back(entidade);
+}
+
 void Engine::update(unsigned ciclos) {
+    for (Entidade entidade : entidades) {
+        entidade.sprite.x = entidade.sprite.x + (entidade.velocidade.x * escalaDeTempo*(1/frequencia));
+        entidade.sprite.y = entidade.sprite.y + (entidade.velocidade.y * escalaDeTempo*(1/frequencia));
+
+    }
 
 }

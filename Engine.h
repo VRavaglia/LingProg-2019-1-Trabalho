@@ -2,6 +2,8 @@
 #define TRABALHO_ENGINE_H
 
 #include "Desenhador.h"
+#include "Entidade.h"
+#include <vector>
 
 /// Classe que controla o andamento do jogo
 class Engine {
@@ -12,6 +14,8 @@ public:
 
     /// Velocidade de reprodução do jogo
     float escalaDeTempo;
+
+    void addEntidade(Entidade &entidade);
 
     /// Jogo em si
     void jogo();
@@ -25,6 +29,8 @@ private:
 
     /// Frequência de atualização do jogo (tentativa de fps)
     float frequencia;
+
+    std::vector <Entidade> entidades;
 };
 
 
