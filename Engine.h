@@ -16,6 +16,7 @@ public:
     float escalaDeTempo;
 
     void addEntidade(Entidade &entidade);
+    void removeEntidade(Entidade &entidade);
 
     /// Jogo em si
     void novoJogo();
@@ -29,6 +30,9 @@ private:
 
     /// Atualizações relacionadas a parte gráfica
     void attGrafica(Entidade &entidade);
+
+    /// Chamada quando uma entidade se encontra fora da tela
+    void emForaDaTela(Entidade &entidade);
 
     ListaSprites batch;
 

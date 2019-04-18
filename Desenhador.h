@@ -73,7 +73,7 @@ private:
 class Tela{
 public:
     /// Inicializa a matriz de caracteres
-    Tela();
+    Tela(unsigned maxX, unsigned maxY);
 
     /// Preenche a matriz com caracteres ' '
     void limpa();
@@ -91,6 +91,10 @@ public:
     char getPixel(size_t x, size_t y);
 
 private:
+
+    /// Tamanho da tela
+    unsigned maxX = 80;
+    unsigned maxY = 16;
 
     /// Matriz de caracteres
     std::vector <std::vector<char>> tela;

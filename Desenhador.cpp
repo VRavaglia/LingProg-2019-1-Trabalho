@@ -5,9 +5,6 @@
 
 using namespace std;
 
-const size_t maxX = 80;
-const size_t maxY = 16;
-
 
 // Compara a dimensão z ou profundidade dos sprites para ordena-los
 struct {
@@ -85,7 +82,14 @@ void ListaSprites::limpa() {
     sprites.clear();
 }
 
-Tela::Tela() {
+void initMatrix(){
+
+}
+
+
+Tela::Tela(unsigned maxX_, unsigned maxY_){
+    maxX = maxX_;
+    maxY = maxY_;
     // Inicializa a matriz de caracteres
     for (size_t x = 0; x < Tela::L(); ++x) {
         size_t H = Tela::H();
@@ -98,6 +102,7 @@ Tela::Tela() {
 
     }
 }
+
 
 size_t Tela::H() {
     return maxY;

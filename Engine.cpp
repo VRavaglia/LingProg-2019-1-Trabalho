@@ -7,6 +7,26 @@
 
 using namespace std;
 
+const unsigned maxX = 80;
+const unsigned maxY = 16;
+
+bool checaForaDaTela(Entidade &entidade, unsigned maxX, unsigned maxY){
+    if (entidade.sprite.x > maxX){
+        return true;
+    }
+    if (entidade.sprite.y > maxY){
+        return true;
+    }
+    if (entidade.sprite.x - entidade.sprite.L() < 0){
+        return true;
+    }
+    if (entidade.sprite.y - entidade.sprite.H() < 0){
+        return true;
+    }
+
+    return false;
+}
+
 Engine::Engine() {
     rodando = true;
     frequencia = 10;
@@ -34,10 +54,10 @@ void Engine::novoJogo() {
 
     Entidade cubo;
     cubo.sprite = sprite1;
-    cubo.velocidade = vec2<float>(50,0);
+    cubo.velocidade = vec2<float>(50,5);
     Engine::addEntidade(cubo);
 
-    Tela tela;
+    Tela tela(maxX, maxY);
 
     unsigned periodo = (unsigned int)(10E5/frequencia);
     unsigned ciclos = 1;
@@ -58,6 +78,9 @@ void Engine::novoJogo() {
         if (entidades[0].sprite.x > 80){
             entidades[0].sprite.x = 0;
         }
+        if (entidades[0].sprite.y > 16){
+            entidades[0].sprite.y = 0;
+        }
         cout <<"FPS = " << fps << endl;
         cout << "spd (" << entidades[0].velocidade.x << "," << entidades[0].velocidade.y << ") "<< " pos(" << entidades[0].sprite.x << "," << entidades[0].sprite.y << ") ";
     }
@@ -65,6 +88,20 @@ void Engine::novoJogo() {
 
 void Engine::addEntidade(Entidade &entidade) {
     entidades.push_back(entidade);
+}
+
+void Engine::removeEntidade(Entidade &entidade) {
+    int i = -1;
+    // Necessita de otimização
+    for (int j = 0; j < entidades.size(); ++j) {
+        if (&entidades[j] == &entidade){
+            i = j;
+        }
+    }
+    if (i >= 0){
+        // Por enquanto o próprio coletor de lixo lida com a entidade removida, possivelmente tratar de maneira melhor
+        entidades.erase(entidades.begin() + i);
+    }
 }
 
 void Engine::attFisica(Entidade &entidade) {
@@ -78,11 +115,23 @@ void Engine::attGrafica(Entidade &entidade) {
     batch.addSprite(entidade.sprite);
 }
 
+void Engine::emForaDaTela(Entidade &entidade) {
+    if (contemComponente(Componente::OBSTACULO, entidade.getComponentes())){
+        removeEntidade();
+    }
+}
+
 void Engine::update() {
     batch.limpa();
     for (size_t i = 0; i < entidades.size(); ++i) {
-        attFisica(entidades[i]);
-        attGrafica(entidades[i]);
+        Entidade *entidade = &entidades[i];
+        attFisica(*entidade);
+        attGrafica(*entidade);
+        if (checaForaDaTela(*entidade, maxX, maxY)){
+            entidade->emForaDaTela();
+            Engine::emForaDaTela(*entidade);
+
+        }
     }
 
 }
