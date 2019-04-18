@@ -81,6 +81,10 @@ void ListaSprites::ordenaSpritesPorZ() {
     sort(sprites.begin(), sprites.end(), spriteLessZ);
 }
 
+void ListaSprites::limpa() {
+    sprites.clear();
+}
+
 Tela::Tela() {
     // Inicializa a matriz de caracteres
     for (size_t x = 0; x < Tela::L(); ++x) {
@@ -104,7 +108,10 @@ size_t Tela::L() {
 }
 
 void Tela::setPixel(size_t x, size_t y, char pixel) {
-    tela[x][y] = pixel;
+    if (x < maxX and x >= 0 and y < maxY and y > 0 ){
+        tela[x][y] = pixel;
+    }
+
 }
 
 char Tela::getPixel(size_t x, size_t y) {

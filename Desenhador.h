@@ -19,6 +19,8 @@ public:
     void setSprite(std::string &arquivo);
     std::vector <std::vector <char>> getSprite();
 
+
+
     /// Retorna a largura
     size_t L();
 
@@ -55,6 +57,9 @@ public:
 
     /// Retorna a fila de sprites
     std::vector <Sprite> getSprites();
+
+    /// Remove os sprites da lista
+    void limpa();
 private:
 
     /// Lista de sprites

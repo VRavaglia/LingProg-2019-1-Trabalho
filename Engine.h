@@ -10,7 +10,7 @@ class Engine {
 public:
     Engine();
     /// Atualiza valores que mudam com o tempo
-    void update(unsigned ciclos);
+    void update();
 
     /// Velocidade de reprodução do jogo
     float escalaDeTempo;
@@ -18,11 +18,19 @@ public:
     void addEntidade(Entidade &entidade);
 
     /// Jogo em si
-    void jogo();
+    void novoJogo();
 private:
 
     /// Cuida da parte visual, desenha na tela
     Desenhador desenhador;
+
+    /// Atualizações relacionadas a física do jogo
+    void attFisica(Entidade &entidade);
+
+    /// Atualizações relacionadas a parte gráfica
+    void attGrafica(Entidade &entidade);
+
+    ListaSprites batch;
 
     /// Ainda sem implementação, status se o jogo deve continuar rodando
     bool rodando;
