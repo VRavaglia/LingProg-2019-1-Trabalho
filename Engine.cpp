@@ -1,5 +1,6 @@
 #include "Engine.h"
 #include "Utilidades.h"
+#include "Jogo.h"
 #include <vector>
 #include <ctime>
 #include <unistd.h>
@@ -7,8 +8,8 @@
 
 using namespace std;
 
-const unsigned maxX = 80;
-const unsigned maxY = 16;
+const unsigned maxX = 140;
+const unsigned maxY = 30;
 
 bool checaForaDaTela(Entidade &entidade, unsigned maxX, unsigned maxY){
     if (entidade.sprite.x > maxX){
@@ -36,27 +37,7 @@ Engine::Engine() {
 
 void Engine::novoJogo() {
 
-    // Simples sprites para teste
-    vector <vector <char>> triangle {{' ',' ','0'},
-                                     {' ','0','0'},
-                                     {'0','*','0'},
-                                     {' ','0','0'},
-                                     {' ',' ','0'}};
-
-    vector <vector <char>> box {{'&','&','&'},
-                                {'&','$','&'},
-                                {'&','&','&'}};
-
-
-
-    Sprite sprite1(box, 10, 10, 2);
-    Sprite sprite2(triangle, 12, 10, 1);
-
-    Entidade cubo;
-    cubo.sprite = sprite1;
-    cubo.velocidade = vec2<float>(50,5);
-    Engine::addEntidade(cubo);
-
+    Jogo jogo;
     Tela tela(maxX, maxY);
 
     unsigned periodo = (unsigned int)(10E5/frequencia);
@@ -64,25 +45,36 @@ void Engine::novoJogo() {
     unsigned fps = 0;
     time_t now = time(0);
 
+    float f = 0;
+    float t = 0;
+
     // Loop do jogo
     while(rodando){
         update();
         desenhador.desenha(batch, tela);
         ciclos++;
+        f += escalaDeTempo;
+        cout <<"FPS = " << fps << endl;
+        cout <<"Entidades = " << entidades.size() << endl;
+        cout <<"Escala de tempo = " << escalaDeTempo << endl;
         usleep(periodo);
         if (time(0) - now >= 1){
             now = time(0);
             fps = ciclos;
             ciclos = 0;
         }
-        if (entidades[0].sprite.x > 80){
-            entidades[0].sprite.x = 0;
+        if (f >= 10){
+            jogo.criaObstaculo(*this, maxX, maxY - 8, 2);
+            f = 0;
+            t += escalaDeTempo;
         }
-        if (entidades[0].sprite.y > 16){
-            entidades[0].sprite.y = 0;
+        if (t>= 4){
+            escalaDeTempo = 0.5;
         }
-        cout <<"FPS = " << fps << endl;
-        cout << "spd (" << entidades[0].velocidade.x << "," << entidades[0].velocidade.y << ") "<< " pos(" << entidades[0].sprite.x << "," << entidades[0].sprite.y << ") ";
+        if (t>= 5.5){
+            escalaDeTempo = 2;
+        }
+
     }
 }
 
@@ -102,6 +94,7 @@ void Engine::removeEntidade(Entidade &entidade) {
         // Por enquanto o próprio coletor de lixo lida com a entidade removida, possivelmente tratar de maneira melhor
         entidades.erase(entidades.begin() + i);
     }
+    cout <<  "Rmovido" << endl;
 }
 
 void Engine::attFisica(Entidade &entidade) {
@@ -117,7 +110,7 @@ void Engine::attGrafica(Entidade &entidade) {
 
 void Engine::emForaDaTela(Entidade &entidade) {
     if (contemComponente(Componente::OBSTACULO, entidade.getComponentes())){
-        removeEntidade();
+        removeEntidade(entidade);
     }
 }
 
