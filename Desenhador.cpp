@@ -1,4 +1,5 @@
 #include "Desenhador.h"
+#include<fstream>
 #include <math.h>
 #include <algorithm>
 #include <iostream>
@@ -50,9 +51,28 @@ Sprite::Sprite(vector <vector <char>> &sprite, float x_, float y_, int z_) {
     z = z_;
 }
 
-vector <vector <char>> Sprite::arquivoParaSprite(string &arquivo){
+vector <vector <char>> Sprite::arquivoParaSprite(string &nomeArquivo){
     vector <vector <char>> spriteNovo;
-    //Ler arquivo texto e converter para uma matriz de caracteres
+    ifstream arquivo(nomeArquivo);
+    size_t l_ = 0;
+    if (arquivo.is_open()) {
+        string linhaString;
+        while (getline(arquivo, linhaString)) {
+            vector<char> linhaVector;
+            for(char &c : linhaString){
+                if (c != '\r' && c != '\n') {
+                    linhaVector.push_back(c);
+                }
+            }
+            spriteNovo.push_back(linhaVector);
+            if (linhaVector.size() > l_){
+                l_ = linhaVector.size();
+            }
+        }
+        arquivo.close();
+    }
+    l = l_;
+    h = spriteNovo.size();
     return spriteNovo;
 };
 
@@ -96,7 +116,7 @@ Tela::Tela(unsigned maxX_, unsigned maxY_){
         vector <char> coluna;
         coluna.reserve(maxY);
         tela.push_back(coluna);
-        for (size_t y = 0; y < Tela::L(); ++y) {
+        for (size_t y = 0; y < Tela::H(); ++y) {
             tela[x].push_back(' ');
         }
 
@@ -149,11 +169,11 @@ void Desenhador::desenha(ListaSprites &sprites, Tela &tela) {
 
     // Adiciona as informações de cada sprite na tela
     for (size_t i = 0; i < tamanhoLista; ++i) {
-        Sprite sprite = sprites.getSprites()[i];
+        Sprite sprite = sprites.getSprites().at(i);
         for (size_t x = 0; x < sprite.L(); ++x) {
             for (size_t y = 0; y < sprite.H(); ++y) {
-                char pixel = sprite.getSprite()[x][y];
-                if (pixel != ' '){
+                char pixel = sprite.getSprite().at(y).at(x);
+                if (pixel && pixel != ' '){
                     tela.setPixel(round(x) + sprite.x, round(y) + sprite.y, pixel);
                 }
             }

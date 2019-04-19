@@ -12,7 +12,7 @@ class Sprite{
 public:
     ///Cria um sprite a partir de um arquivo texto, posições no espaço (x e y) e ordem em que vai ser desenhado (profundidade z)
     Sprite();
-    Sprite(std::string &arquivo, float x, float y, int z);
+    Sprite(std::string &nomeArquivo, float x, float y, int z);
     Sprite(std::vector <std::vector <char>> &sprite, float x, float y, int z);
 
     void setSprite(std::vector <std::vector <char>> &sprite);

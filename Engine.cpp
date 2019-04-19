@@ -64,7 +64,7 @@ void Engine::novoJogo() {
             ciclos = 0;
         }
         if (f >= 10){
-            jogo.criaObstaculo(*this, maxX, maxY - 8, 2);
+            jogo.criaObstaculo(*this, maxX, maxY - 6, 2);
             f = 0;
             t += escalaDeTempo;
         }
@@ -94,7 +94,6 @@ void Engine::removeEntidade(Entidade &entidade) {
         // Por enquanto o próprio coletor de lixo lida com a entidade removida, possivelmente tratar de maneira melhor
         entidades.erase(entidades.begin() + i);
     }
-    cout <<  "Rmovido" << endl;
 }
 
 void Engine::attFisica(Entidade &entidade) {
