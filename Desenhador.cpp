@@ -134,7 +134,7 @@ size_t Tela::L() {
 
 void Tela::setPixel(size_t x, size_t y, char pixel) {
     if (x < maxX and x >= 0 and y < maxY and y > 0 ){
-        tela[x][y] = pixel;
+        tela.at(x).at(y) = pixel;
     }
 
 }
@@ -159,7 +159,7 @@ void Desenhador::escreveTela(Tela &tela) {
         for (size_t x = 0; x < tela.L(); ++x) {
             cout << tela.getPixel(x,y);
         }
-        cout << endl;
+        cout << '\n';
     }
 }
 
@@ -170,11 +170,13 @@ void Desenhador::desenha(ListaSprites &sprites, Tela &tela) {
     // Adiciona as informações de cada sprite na tela
     for (size_t i = 0; i < tamanhoLista; ++i) {
         Sprite sprite = sprites.getSprites().at(i);
-        for (size_t x = 0; x < sprite.L(); ++x) {
-            for (size_t y = 0; y < sprite.H(); ++y) {
+        for (size_t y = 0; y < sprite.getSprite().size(); ++y)
+        {
+            size_t sizeY = sprite.getSprite().at(y).size();
+            for (size_t x = 0; x < sizeY; ++x){
                 char pixel = sprite.getSprite().at(y).at(x);
                 if (pixel && pixel != ' '){
-                    tela.setPixel(round(x) + sprite.x, round(y) + sprite.y, pixel);
+                    tela.setPixel(round(x) + sprite.x, round(y) + sprite.y - sprite.H(), pixel);
                 }
             }
         }

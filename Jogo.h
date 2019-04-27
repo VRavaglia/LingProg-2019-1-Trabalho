@@ -8,19 +8,23 @@
 
 class Jogo {
 public:
-    Jogo();
+    Jogo() = default;
     Jogo(unsigned dificuldade);
 
     /// Dificuldade do jogo
-    unsigned dificuldade;
+    unsigned dificuldade = 1;
 
     /// Cria o obstaculo basico do jogo
     void criaObstaculo(Engine &engine, float x, float y, unsigned z);
+
+    /// Cria instancia do jogador
+    void criaPlayer(Engine &engine);
 
 private:
     // Lista contendo os respectivos arquivos para cada sprite
     const std::map<std::string, std::string> arquivosSprites ={
             {"barreira", "barreira.txt"},
+            {"player", "player.txt"},
     };
 };
 

@@ -48,23 +48,28 @@ void Engine::novoJogo() {
     float f = 0;
     float t = 0;
 
+    float performace = 1;
+
+    jogo.criaPlayer(*this);
+
     // Loop do jogo
     while(rodando){
-        update();
+        update(performace);
         desenhador.desenha(batch, tela);
         ciclos++;
         f += escalaDeTempo;
-        cout <<"FPS = " << fps << endl;
-        cout <<"Entidades = " << entidades.size() << endl;
+        cout <<"FPS = " << fps << '\n';
+        cout <<"Entidades = " << entidades.size() << '\n';
         cout <<"Escala de tempo = " << escalaDeTempo << endl;
-        usleep(periodo);
+        //usleep(periodo);
         if (time(0) - now >= 1){
             now = time(0);
             fps = ciclos;
             ciclos = 0;
+            performace = fps/frequencia;
         }
         if (f >= 10){
-            jogo.criaObstaculo(*this, maxX, maxY - 6, 2);
+            jogo.criaObstaculo(*this, maxX, maxY, 2);
             f = 0;
             t += escalaDeTempo;
         }
@@ -96,9 +101,9 @@ void Engine::removeEntidade(Entidade &entidade) {
     }
 }
 
-void Engine::attFisica(Entidade &entidade) {
-    entidade.sprite.x += entidade.velocidade.x * escalaDeTempo*(1/frequencia);
-    entidade.sprite.y += entidade.velocidade.y * escalaDeTempo*(1/frequencia);
+void Engine::attFisica(Entidade &entidade, float performace) {
+    entidade.sprite.x += entidade.velocidade.x * escalaDeTempo*(1/frequencia)/performace;
+    entidade.sprite.y += entidade.velocidade.y * escalaDeTempo*(1/frequencia)/performace;
 }
 
 void Engine::attGrafica(Entidade &entidade) {
@@ -113,11 +118,11 @@ void Engine::emForaDaTela(Entidade &entidade) {
     }
 }
 
-void Engine::update() {
+void Engine::update(float performace) {
     batch.limpa();
     for (size_t i = 0; i < entidades.size(); ++i) {
         Entidade *entidade = &entidades[i];
-        attFisica(*entidade);
+        attFisica(*entidade, performace);
         attGrafica(*entidade);
         if (checaForaDaTela(*entidade, maxX, maxY)){
             entidade->emForaDaTela();

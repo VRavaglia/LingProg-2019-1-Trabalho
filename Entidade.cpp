@@ -11,7 +11,6 @@ bool contemComponente(Componente componente, unsigned componentes){
 }
 
 Entidade::Entidade(): velocidade (vec2<float>(0,0)){
-    componentes = 0;
 }
 
 void Entidade::emForaDaTela() {

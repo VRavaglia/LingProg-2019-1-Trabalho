@@ -10,7 +10,7 @@ class Engine {
 public:
     Engine();
     /// Atualiza valores que mudam com o tempo
-    void update();
+    void update(float fps);
 
     /// Velocidade de reprodução do jogo
     float escalaDeTempo;
@@ -20,13 +20,18 @@ public:
 
     /// Jogo em si
     void novoJogo();
+
+    /// Parametros de inicialização do jogador
+    int pXInicio = 0;
+    int pYInicio = 30;
+    int pZInicio = 1;
 private:
 
     /// Cuida da parte visual, desenha na tela
     Desenhador desenhador;
 
     /// Atualizações relacionadas a física do jogo
-    void attFisica(Entidade &entidade);
+    void attFisica(Entidade &entidade, float fps);
 
     /// Atualizações relacionadas a parte gráfica
     void attGrafica(Entidade &entidade);
@@ -42,7 +47,11 @@ private:
     /// Frequência de atualização do jogo (tentativa de fps)
     float frequencia;
 
+    /// Lista de entidades ativas no jogo
     std::vector <Entidade> entidades;
+
+
+
 };
 
 
