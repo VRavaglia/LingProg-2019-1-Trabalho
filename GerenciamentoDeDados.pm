@@ -2,13 +2,15 @@ package GerenciamentoDeDados;
 use strict;
 use warnings FATAL => 'all';
 use Data::Dumper;
+use File::Copy qw(move);
 
 # lista de mensagens de erro
 my %mensagensErro = (
     "arquivo_01"  => "Erro ao abrir o arquivo: ",
 );
 
-my $debug = 0;
+
+my $debug = 1;
 
 #transforma um arquivo texto em uma matriz em que as linhas representam as linhas do arquivo e as colunas representam as palavras de uma linha
 sub matrizPalavras{
@@ -62,6 +64,50 @@ sub listaPontuacoesMaiores{
         $n = 0;
     }
     return splice @ordPontuacoes, $n;
+}
+
+
+sub salvaPerfil{
+    my $arquivo = shift;
+    my $nome = shift;
+    my $pontuacao = shift;
+    my $dificuldade = shift;
+
+
+
+    open my $in,  '<',  $arquivo      or die ("\n" . $mensagensErro{"arquivo_01"}. "\n" . $!);
+    open my $out, '>', "$arquivo.new" or die ("\n" . $mensagensErro{"arquivo_01"}. "\n" . $!);
+
+    my $novo = 1;
+
+    while (my $linha = <$in>) {
+        chomp $linha;
+        if($debug == 1) {
+            print $linha . "\n";
+        }
+        if($linha =~ /$nome\|\d+\|\d+/){
+            if($debug == 1) {
+                print "Perfil encontrado: " . $linha . "\n";
+            }
+            print $out $nome . "\|" . $pontuacao . "\|" . $dificuldade;
+            if($debug == 1) {
+                print "Novo perfil: " . $linha . "\n";
+            }
+            $novo = 0;
+        }
+        else{
+            print $out $linha;
+        }
+        print $out "\n";
+    }
+    if($novo > 0){
+        if($debug == 1) {
+            print "Criando novo perfil";
+        }
+        print $out $nome . "\|" . $pontuacao . "\|" . $dificuldade;
+    }
+    close $out;
+    move "$arquivo.new" , $arquivo;
 }
 
 
