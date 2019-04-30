@@ -10,7 +10,7 @@ my %mensagensErro = (
 );
 
 
-my $debug = 1;
+my $debug = 0;
 
 #transforma um arquivo texto em uma matriz em que as linhas representam as linhas do arquivo e as colunas representam as palavras de uma linha
 sub matrizPalavras{
@@ -72,9 +72,7 @@ sub salvaPerfil{
     my $nome = shift;
     my $pontuacao = shift;
     my $dificuldade = shift;
-
-
-
+    my $status = 0;
     open my $in,  '<',  $arquivo      or die ("\n" . $mensagensErro{"arquivo_01"}. "\n" . $!);
     open my $out, '>', "$arquivo.new" or die ("\n" . $mensagensErro{"arquivo_01"}. "\n" . $!);
 
@@ -105,9 +103,11 @@ sub salvaPerfil{
             print "Criando novo perfil";
         }
         print $out $nome . "\|" . $pontuacao . "\|" . $dificuldade;
+        $status = 1;
     }
     close $out;
     move "$arquivo.new" , $arquivo;
+    return $status;
 }
 
 
