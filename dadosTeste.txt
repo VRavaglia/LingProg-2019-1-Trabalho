@@ -1,3 +1,51 @@
+## Comentarios serao assim
+
+## Todo tema deve ser escrito da forma (unsigned int)_nomeDoTema
+## Espacos em branco fora do retangulo definido pelo sprite serao ignorados
+## Definiremos os tamanhos dos sprites ou nao??
+## Exemplo:
+
+#0_TEMA ## Inicia um tema
+00000
+00000
+00000
+00000
+00000
+00000   ##Tamanho:6x5 - Barreira
+
+
+1111111111111111111111111111111
+1111111111111111111111111111111
+1111111111111111111111111111111
+1111111111111111111111111111111  ##Tamanho: 4x31 - Player
+
+#0_TEMA! ## Termina um tema
+
+#1_TEMA
+&==-%
+&==-%
+&==-%
+&==-%
+&==-%
+&==-%
+
+\.          |\
+   \`.___---~~~~~-\____________
+   //~~----__<<<(_o_=====
+  '           |/'
+
+#1_TEMA!
+
+#2_TEMA
+#2_TEMA!
+
+##  Modelo de jogo não terminado:
+###  nomeDoJogador|pontuacao|dificuldade
+
+## Modelo de jogo terminado:
+### nomeDoJogador|pontuacao
+
+## Exemplos:
 raposo|1000|2
 raposo|2143124
 raposo|287
