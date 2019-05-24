@@ -19,6 +19,8 @@ sub printMenu{
     print "| 0 ------------------------ Sair|\n";
     print "| 1 -- Lista N maiores pontuacoes|\n";
     print "| 2 ------------- Salva progresso|\n";
+    print "| 3 --------------- Le jogo salvo|\n";
+    print "| 4 ---- Le pontuacoes de jogador|\n";
     print "|================================|\n";
 }
 
@@ -32,7 +34,7 @@ sub clear{
 
 sub continuar{
     print "\nAperte \{ENTER\} para voltar ao menu principal...\n";
-    my $key = <>;
+    my $key = <STDIN>;
 }
 
 my $opcao;
@@ -44,7 +46,7 @@ while($rodando > 0){
     clear();
     printMenu();
     print "Digite um numero de 0 a 5:\n";
-    $opcao = <>;
+    $opcao = <STDIN>;
     chomp $opcao;
     if(looks_like_number($opcao)){
         clear();
@@ -53,11 +55,12 @@ while($rodando > 0){
             $rodando = 0;
         }
         elsif($opcao == 1){
+          # Lista N maiores pontuacoes
             print "Digite o nome do arquivo de pontuacoes:\n";
-            my $arquivo = <>;
+            my $arquivo = <STDIN>;
             chomp $arquivo;
             print "Digite o numero maximo de pontuacoes:\n";
-            my $n = <>;
+            my $n = <STDIN>;
             chomp $n;
             my @pontuacoes = GerenciamentoDeDados::listaPontuacoesMaiores($arquivo, $n);
             my $size = scalar @pontuacoes;
@@ -67,17 +70,18 @@ while($rodando > 0){
             }
             continuar();
         }elsif ($opcao == 2){
+          # Salva progresso
             print "Digite o nome do arquivo de pontuacoes:\n";
-            my $arquivo = <>;
+            my $arquivo = <STDIN>;
             chomp $arquivo;
             print "Digite o nome do perfil:\n";
-            my $nome = <>;
+            my $nome = <STDIN>;
             chomp $nome;
             print "Digite a pontuacao atual:\n";
-            my $pontos = <>;
+            my $pontos = <STDIN>;
             chomp $pontos;
             print "Digite a dificuldade atual:\n";
-            my $dificuldade = <>;
+            my $dificuldade = <STDIN>;
             chomp $dificuldade;
             my $status = GerenciamentoDeDados::salvaPerfil($arquivo,$nome,$pontos,$dificuldade);
             if ($status == 0){
@@ -90,9 +94,39 @@ while($rodando > 0){
             }
             continuar();
         }elsif ($opcao == 3){
-
+        # Le jogo salvo
+          my $status;
+          my $pontuacao;
+          #print "Digite o nome do arquivo de pontuacoes:\n";
+          #my $arquivo = <STDIN>;
+          #chomp $arquivo;
+          my $arquivo = "dadosTeste.txt";
+          print "Digite o nome do perfil:\n";
+          my $nome = <STDIN>;
+          chomp $nome;
+          print "Digite a dificuldade atual:\n";
+          my $dificuldade = <STDIN>;
+          chomp $dificuldade;
+          ($pontuacao, $status) = GerenciamentoDeDados::leJogoEmAndamento($nome, $dificuldade, $arquivo);
+          print "Pontuacao: $pontuacao";
+          continuar();
         }elsif ($opcao == 4){
-
+        # Le pontuacoes de jogador
+          my $status;
+          my @pontuacao;
+          #print "Digite o nome do arquivo de pontuacoes:\n";
+          #my $arquivo = <STDIN>;
+          #chomp $arquivo;
+          my $arquivo = "dadosTeste.txt";
+          print "Digite o nome do perfil:\n";
+          my $nome = <STDIN>;
+          chomp $nome;
+          print "Digite a restricao atual:\n";
+          my $restricao = <STDIN>;
+          chomp $restricao;
+          (@pontuacao, $status) = GerenciamentoDeDados::listaPontuacoesDeJogador($nome, $restricao, $arquivo);
+          print "Lista de pontos: @pontuacao";
+          continuar();
         }elsif ($opcao == 5){
 
         }
