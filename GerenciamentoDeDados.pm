@@ -7,6 +7,10 @@ use File::Copy qw(move);
 # lista de mensagens de erro
 my %mensagensErro = (
     "arquivo_01"  => "Erro ao abrir o arquivo: ",
+    "ok" => "Tudo funcionou como esperado",
+    "nome_sem_jogo" => "Nao foi encontrada uma partida associada ao nome",
+    "dificuldade_sem_jogo" => "Nao foi encontrada uma partida com essa dificuldade"
+
 );
 
 
@@ -20,13 +24,16 @@ sub matrizPalavras{
     my $i = 0;
     while (my $linha = <$arquivo>) {
         chomp $linha;
-        my @palavras = split /\|/, $linha;
-        my $j = 0;
-        for my $k (0 .. scalar @palavras - 1){
+        if (substr($linha, 0, 1) ne "#" && $linha =~ m/(\|\d+\|\d+)$|(\|\d+)$/)
+        {
+          my @palavras = split /\|/, $linha;
+          my $j = 0;
+          for my $k (0 .. scalar @palavras - 1){
             $todas[$i][$j] = $palavras[$k];
             $j++;
+          }
+          $i++;
         }
-        $i++;
     }
     return @todas;
 }
@@ -110,5 +117,113 @@ sub salvaPerfil{
     return $status;
 }
 
+# sub leJogoEmAndamento (nome, dificuldade, arquivo de dados)
+#  Recebe: Nome do jogador (nome do perfil)
+#          Dificuldade desejada do jogo
+#          Arquivo de dados para a matriz de palavras
+#
+#  Retorna: Pontuacao atual da partida
+#           Codigo de erro
+sub leJogoEmAndamento
+{
+  my $nome = $_[0];
+  my $pontuacao;
+  my $dificuldade = $_[1];
+  my @linhas = matrizPalavras($_[2]);
+  my $chaveErro = "ok";
 
+  for my $i (0 .. scalar @linhas)
+  {
+    if (defined $linhas [$i][2] && $dificuldade == $linhas [$i][2])
+    {
+      if ($linhas [$i][0] eq $nome)
+      {
+          $pontuacao = $linhas [$i][1];
+      }
+      else
+      {
+        $chaveErro = "nome_sem_jogo";
+      }
+    }
+    else
+    {
+      $chaveErro = "dificuldade_sem_jogo";
+    }
+  }
+  return $pontuacao, $chaveErro;
+}
+
+# sub listaPontuacoesDeJogador (nome, nivelDeRestricao, matriz de palvras )
+#  Recebe: Nome do jogador em qualquer formato
+#          Nivel de restricao na procura do nome. Diferencia pedro de P3dr0 de Pedro ou não
+#          Matriz de palavras referente ao arquivo de dados
+#
+#  Retorna: Lista das pontuacoes (array de pontuacoes)
+#
+#
+#  Falta: ver se vamos listar as partidas nao terminadas (sim)
+#
+sub listaPontuacoesDeJogador
+{
+  my $nome = $_[0];
+  my @partidas;
+  my $restricao = $_[1];
+  my @linhas = matrizPalavras($_[2]);
+  my $chaveErro = "ok";
+  my $nomeIterador;
+  my $pontuacaoIterador;
+  my $i;
+
+  if ($restricao == 1)
+  {
+    $nome =~ tr/A-Z/a-z/;
+    $nome =~ tr/@/a/;
+    $nome =~ tr/&/e/;
+    $nome =~ tr/3/e/;
+    $nome =~ tr/1/i/;
+    $nome =~ tr/0/o/;
+  }
+
+  if ($restricao == 2)
+  {
+    $nome =~ tr/A-Z/a-z/;
+  }
+
+  for $i (0 .. scalar @linhas)
+  {
+    $nomeIterador = $linhas [$i][0];
+    $pontuacaoIterador = $linhas [$i][1];
+    if (defined $nomeIterador && defined $pontuacaoIterador)
+    {
+      if ($restricao == 2)
+      {
+        $nomeIterador =~ tr/A-Z/a-z/;
+      }
+
+      if ($restricao == 1)
+      {
+        $nomeIterador =~ tr/A-Z/a-z/;
+        $nomeIterador =~ tr/@/a/;
+        $nomeIterador =~ tr/&/e/;
+        $nomeIterador =~ tr/3/e/;
+        $nomeIterador =~ tr/1/i/;
+        $nomeIterador =~ tr/0/o/;
+      }
+
+      if ($nomeIterador =~ m/$nome/)
+      {
+        push (@partidas, $pontuacaoIterador);
+      }
+    } #if (defined $nomeIterador)
+    else
+    {
+    }
+
+    if ( @partidas == 0)
+    {
+      $chaveErro = "partidas_nao_encontradas"
+    }
+  }
+  return @partidas;
+}
 1;
