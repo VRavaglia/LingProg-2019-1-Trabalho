@@ -262,22 +262,19 @@ sub converteLvl2{
 sub configuraAparencia{
     my $arquivoP = shift;
     my $arquivoO = shift;
-    my @pBase = arquivoToVetor($arquivoP);
-    my @oBase = arquivoToVetor($arquivoO);
-    printVector(@pBase);
-    my @p1 = converteLvl1(@pBase);
-    print "\n";
-    printVector(@p1);
-    my @p2 = converteLvl2(@pBase);
-    print "\n";
-    printVector(@p2);
-    print "\n";
-    printVector(@oBase);
-    my @o1 = converteLvl1(@oBase);
-    print "\n";
-    printVector(@o1);
-    my @o2 = converteLvl2(@oBase);
-    print "\n";
-    printVector(@o2);
+    my @aparencias;
+    my @aparenciaBaseP = arquivoToVetor($arquivoP);
+    $aparencias[0][0] = \@aparenciaBaseP;
+    my @aparenciaLvl1P = converteLvl1(@aparenciaBaseP);
+    $aparencias[0][1] = \@aparenciaLvl1P;
+    my @aparenciaLvl2P = converteLvl2(@aparenciaBaseP);
+    $aparencias[0][2] = \@aparenciaLvl2P;
+    my @aparenciaBaseO = arquivoToVetor($arquivoO);
+    $aparencias[1][0] = \@aparenciaBaseO;
+    my @aparenciaLvl1O = converteLvl1(@aparenciaBaseO);
+    $aparencias[1][1] = \@aparenciaLvl1O;
+    my @aparenciaLvl2O = converteLvl2(@aparenciaBaseO);
+    $aparencias[1][2] = \@aparenciaLvl2O;
+    return @aparencias;
 }
 1;

@@ -163,7 +163,7 @@ while ($rodando > 0) {
             # Mudancas de tema
             my $arquivoPlayer;
             my $arquivoObstaculo;
-            print "Para um funcionamento justo do jogo os tamanhos maximos (em caracteres) dos arquivos de personagem e obstaculos sao 10x10.\n";
+            print "Para um funcionamento justo do jogo é recomendado que os tamanhos maximos (em caracteres) dos arquivos de personagem e obstaculos sejam de 10x10.\n";
             if ($debug == 1) {
                 $arquivoPlayer = "playerTeste.txt";
                 $arquivoObstaculo = "obstaculoTeste.txt";
@@ -176,9 +176,20 @@ while ($rodando > 0) {
                 $arquivoObstaculo = <STDIN>;
                 chomp $arquivoObstaculo;
             }
-            my @aparenciasJogador;
-            my @aparenciasObstaculos;
-            (@aparenciasJogador, @aparenciasObstaculos) = GerenciamentoDeDados::configuraAparencia($arquivoPlayer, $arquivoObstaculo);
+            my @aparencias;
+            @aparencias = GerenciamentoDeDados::configuraAparencia($arquivoPlayer, $arquivoObstaculo);
+            print "Aparencia base: \n";
+            GerenciamentoDeDados::printVector(@{$aparencias[0][0]});
+            print "Aparencia lvl 1: \n";
+            GerenciamentoDeDados::printVector(@{$aparencias[0][1]});
+            print "Aparencia lvl 2: \n";
+            GerenciamentoDeDados::printVector(@{$aparencias[0][2]});
+            print "\nAparencia base: \n";
+            GerenciamentoDeDados::printVector(@{$aparencias[1][0]});
+            print "Aparencia lvl 1: \n";
+            GerenciamentoDeDados::printVector(@{$aparencias[1][1]});
+            print "Aparencia lvl 2: \n";
+            GerenciamentoDeDados::printVector(@{$aparencias[1][2]});
             continuar();
         }
     }
