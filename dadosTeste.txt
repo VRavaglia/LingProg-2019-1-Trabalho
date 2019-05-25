@@ -7,7 +7,7 @@
 ### nomeDoJogador|pontuacao
 
 ## Exemplos:
-raposo|1000|2
+raposo|4000|2
 raposo|2143124
 pedrO|7645|4
 raposo|287
@@ -18,3 +18,6 @@ pedro|23
 PeDro|234
 rapos0|2333
 pEdRo|1112|3
+rAposo|1500
+rap0so|1000
+
