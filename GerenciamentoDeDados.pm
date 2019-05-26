@@ -10,7 +10,7 @@ my %mensagensErro = (
     "ok"                        => "Tudo funcionou como esperado",
     "nome_sem_jogo"             => "Nao foi encontrada uma partida associada ao nome",
     "dificuldade_sem_jogo"      => "Nao foi encontrada uma partida com essa dificuldade",
-    "pontuacao_nao_encontrada"  => "Nao foi encontraf nenhuma pontuacao associada ao nome e a dificuldade especificada",
+    "pontuacao_nao_encontrada"  => "Nao foi encontrada nenhuma pontuacao associada ao nome e a dificuldade especificada",
     "partidas_nao_encontradas"  => "Nao foram encontradas paridas associadas ao nome e a restricao"
 );
 

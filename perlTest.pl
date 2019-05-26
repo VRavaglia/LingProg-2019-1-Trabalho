@@ -45,10 +45,13 @@ sub continuar {
 
 my $opcao;
 my $rodando = 1;
-my $debug = 1;
+my $debug = 0;
 
 while ($rodando > 0) {
     clear();
+    if ($debug == 1){
+        print "MODO DE DEBUG HABILITADO\n"
+    }
     printMenu();
     print "Digite um numero de 0 a 5:\n";
     $opcao = <STDIN>;
@@ -134,7 +137,13 @@ while ($rodando > 0) {
             my $dificuldade = <STDIN>;
             chomp $dificuldade;
             ($pontuacao, $status) = GerenciamentoDeDados::leJogoEmAndamento($nome, $dificuldade, $arquivo);
-            print "Pontuacao: $pontuacao";
+            if ($pontuacao >= 0){
+                print "Pontuacao encontrada: $pontuacao";
+            }
+            else{
+                print "Perfil nao encontrado.";
+            }
+
             continuar();
         }
         elsif ($opcao == 4) {
@@ -160,7 +169,8 @@ while ($rodando > 0) {
             my $restricao = <STDIN>;
             chomp $restricao;
             (@pontuacao, $status) = GerenciamentoDeDados::listaPontuacoesDeJogador($nome, $restricao, $arquivo);
-            print "Lista de pontos: @pontuacao";
+            print "Lista de pontos:\n";
+            GerenciamentoDeDados::printVector(@pontuacao);
             continuar();
         }
         elsif ($opcao == 5) {
