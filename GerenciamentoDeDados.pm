@@ -6,11 +6,12 @@ use File::Copy qw(move);
 
 # lista de mensagens de erro
 my %mensagensErro = (
-    "arquivo_01"           => "Erro ao abrir o arquivo: ",
-    "ok"                   => "Tudo funcionou como esperado",
-    "nome_sem_jogo"        => "Nao foi encontrada uma partida associada ao nome",
-    "dificuldade_sem_jogo" => "Nao foi encontrada uma partida com essa dificuldade"
-
+    "arquivo_01"                => "Erro ao abrir o arquivo: ",
+    "ok"                        => "Tudo funcionou como esperado",
+    "nome_sem_jogo"             => "Nao foi encontrada uma partida associada ao nome",
+    "dificuldade_sem_jogo"      => "Nao foi encontrada uma partida com essa dificuldade",
+    "pontuacao_nao_encontrada"  => "Nao foi encontraf nenhuma pontuacao associada ao nome e a dificuldade especificada",
+    "partidas_nao_encontradas"  => "Nao foram encontradas paridas associadas ao nome e a restricao"
 );
 
 my $debug = 0;
@@ -124,22 +125,26 @@ sub salvaPerfil {
 #           Codigo de erro
 sub leJogoEmAndamento {
     my $nome = $_[0];
-    my $pontuacao;
+    my $pontuacao = -1;
     my $dificuldade = $_[1];
     my @linhas = matrizPalavras($_[2]);
-    my $chaveErro = "ok";
+    my $chaveErro = "pontuacao_nao_encontrada";
 
+
+    #validar dados de entrada;
     for my $i (0 .. scalar @linhas) {
         if (defined $linhas[$i][2] && $dificuldade == $linhas[$i][2]) {
             if ($linhas[$i][0] eq $nome) {
+              # validar pontuacao;
                 $pontuacao = $linhas[$i][1];
+                $chaveErro = "ok";
             }
             else {
-                $chaveErro = "nome_sem_jogo";
+                #jogos que nao correspondem ao nome
             }
         }
         else {
-            $chaveErro = "dificuldade_sem_jogo";
+            #jogos terminados (sem dificuldade definida)
         }
     }
     return $pontuacao, $chaveErro;
@@ -157,13 +162,15 @@ sub leJogoEmAndamento {
 #
 sub listaPontuacoesDeJogador {
     my $nome = $_[0];
-    my @partidas;
+    my @partidas = 0;
     my $restricao = $_[1];
     my @linhas = matrizPalavras($_[2]);
     my $chaveErro = "ok";
     my $nomeIterador;
     my $pontuacaoIterador;
     my $i;
+
+    #validar dados de entrada
 
     if ($restricao == 1) {
         $nome =~ tr/A-Z/a-z/;
@@ -173,9 +180,14 @@ sub listaPontuacoesDeJogador {
         $nome =~ tr/1/i/;
         $nome =~ tr/0/o/;
     }
-
-    if ($restricao == 2) {
+    elsif ($restricao == 2) {
         $nome =~ tr/A-Z/a-z/;
+    }
+    elsif ($restricao == 3) {
+      #nao faz nada
+    }
+    else {
+      #erro
     }
 
     for $i (0 .. scalar @linhas) {
@@ -203,7 +215,7 @@ sub listaPontuacoesDeJogador {
         }
 
         if (@partidas == 0) {
-            $chaveErro = "partidas_nao_encontradas"
+            $chaveErro = "partidas_nao_encontradas";
         }
     }
     return @partidas;
