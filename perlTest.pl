@@ -151,8 +151,8 @@ while ($rodando > 0) {
             chomp $nome;
             print "Digite o codigo de restricao:\n";
             print "1 -> Case insensitive e troca de simbolos por letras comuns\n";
-            print "2 -> Apenas case insensitive";
-            print "3 -> Nome exato";
+            print "2 -> Apenas case insensitive\n";
+            print "3 -> Nome exato\n";
             my $restricao = <STDIN>;
             chomp $restricao;
             (@pontuacao, $status) = GerenciamentoDeDados::listaPontuacoesDeJogador($nome, $restricao, $arquivo);
