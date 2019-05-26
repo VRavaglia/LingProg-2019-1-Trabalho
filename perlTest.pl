@@ -8,6 +8,10 @@ use Term::ReadKey;
 use lib './';
 use GerenciamentoDeDados;
 
+use utf8;
+
+use Unicode::Normalize;
+
 #my @teste = GerenciamentoDeDados::listaPontuacoesMaiores("dadosTeste.txt", 3);
 #print Dumper @teste;
 #GerenciamentoDeDados::salvaPerfil("dadosTeste.txt","raposo","666","1");
@@ -163,7 +167,7 @@ while ($rodando > 0) {
             # Mudancas de tema
             my $arquivoPlayer;
             my $arquivoObstaculo;
-            print "Para um funcionamento justo do jogo é recomendado que os tamanhos maximos (em caracteres) dos arquivos de personagem e obstaculos sejam de 10x10.\n";
+            print "Para um funcionamento justo do jogo eh recomendado que os tamanhos maximos (em caracteres) dos arquivos de personagem e obstaculos sejam de 10x10.\n";
             if ($debug == 1) {
                 $arquivoPlayer = "playerTeste.txt";
                 $arquivoObstaculo = "obstaculoTeste.txt";

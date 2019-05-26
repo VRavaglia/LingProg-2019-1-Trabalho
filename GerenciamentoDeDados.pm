@@ -245,6 +245,21 @@ sub converteLvl1{
 
 sub converteLvl2{
     my @aparencia = @_;
+    for my $i(0 .. scalar @aparencia - 1) {
+        if ($aparencia[$i] =~ /\so\s/) {
+            my $temp = $-[0] + 1;
+            if ($i > 0 and $i < (scalar @aparencia - 1)) {
+                if ($aparencia[$i - 1] =~ /^.{$temp}\s/gm) {
+                    if ($aparencia[$i + 1] =~ /^.{$temp}\s/gm) {
+                        my $char = chr(254);
+                        substr($aparencia[$i + 1],$temp,1,$char);
+                        substr($aparencia[$i -1],$temp,1,$char);
+                        $aparencia[$i] =~ s/\so\s/$char$char$char/;
+                    }
+                }
+            }
+        }
+    }
     for my $i(0 .. scalar @aparencia - 1){
         $aparencia[$i] =~ s/\|/\!/g;
         $aparencia[$i] =~ s/\*/O/g;
@@ -252,9 +267,9 @@ sub converteLvl2{
         $aparencia[$i] =~ s/\_/=/g;
         my ($trailing) = $aparencia[$i] =~ /^\s*/g;
         $aparencia[$i] =~ s/^\s*/\%/g;
-        $aparencia[$i] =~ s/\s/\#/g;
+        my $char = chr(176);
+        $aparencia[$i] =~ s/\s/$char/g;
         $aparencia[$i] =~ s/\%/$trailing/g;
-
     }
     return @aparencia;
 }
