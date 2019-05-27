@@ -3,7 +3,6 @@ use warnings FATAL => 'all';
 use Data::Dumper;
 use English qw'-no_match_vars';
 use Scalar::Util qw(looks_like_number);
-use Term::ReadKey;
 
 use lib './';
 use GerenciamentoDeDados;
@@ -178,6 +177,7 @@ while ($rodando > 0) {
             my $arquivoPlayer;
             my $arquivoObstaculo;
             print "Para um funcionamento justo do jogo eh recomendado que os tamanhos maximos (em caracteres) dos arquivos de personagem e obstaculos sejam de 10x10.\n";
+            print "Nao use os caracteres \# e \%.\n";
             if ($debug == 1) {
                 $arquivoPlayer = "playerTeste.txt";
                 $arquivoObstaculo = "obstaculoTeste.txt";
