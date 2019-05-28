@@ -7,8 +7,7 @@ using namespace std;
 int main(){
     perlWrapper pw;
     pw.interpretador();
-    cout << pw.Um(5,6) << endl;
-    cout << pw.Dois("teste") << endl;
+    cout << pw.salvaPerfil("dadosTeste.txt",  "raposo", 6666, 6.6)  << endl;
 
     return 0;
 }

@@ -14,11 +14,11 @@ public:
 
     void interpretador();
 
-    vector<map<string, unsigned>> &listaPontuacoesMaiores(string nomeArquivo, unsigned max);
+    vector<pair<string, unsigned>> listaPontuacoesMaiores(string nomeArquivo, unsigned max);
     int salvaPerfil(string nomeArquivo, string nome, unsigned pontos, float dificuldade);
     int leJogo(string nome, float dificuldade, string nomeArquivo, unsigned &pontuacao);
     int listaPontuacoesJogador(string nome, int restricao, string nomeArquivo, vector<unsigned> &listaPontos);
-    vector<vector<string>> &configuraAparencia(string nomeArquivoPlayer, string nomeArquivoObstculo);
+    vector<string> configuraAparencia(string nomeArquivoPlayer, string nomeArquivoObstculo);
 
     // Versao no perl:
     //my @pontuacoes = GerenciamentoDeDados::listaPontuacoesMaiores($arquivo, $n);
