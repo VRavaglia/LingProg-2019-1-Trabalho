@@ -1,11 +1,14 @@
-#include "PerlWrapper.h"
 #include <iostream>
 #include <string>
-int main ()
-{
-    PerlWrapper tst("");
-    tst.Interpretador();
-    cout << tst.FuncaoUm("estou", "testando") << endl;
-    cout << tst.FuncaoDois() << endl;
+#include "perlWrapper.h"
+
+using namespace std;
+
+int main(){
+    perlWrapper pw;
+    pw.interpretador();
+    cout << pw.Um(5,6) << endl;
+    cout << pw.Dois("teste") << endl;
+
     return 0;
 }
