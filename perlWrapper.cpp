@@ -4,11 +4,6 @@
 #include <map>
 #include <algorithm>
 
-// TODO
-//  - my @pontuacoes = GerenciamentoDeDados::listaPontuacoesMaiores($arquivo, $n);
-//  - (@pontuacao, $status) = GerenciamentoDeDados::listaPontuacoesDeJogador($nome, $restricao, $arquivo);
-//  - @aparencias = GerenciamentoDeDados::configuraAparencia($arquivoPlayer, $arquivoObstaculo);
-
 perlWrapper::perlWrapper(){
     PERL_SYS_INIT3(NULL, NULL, NULL);
     my_perl = perl_alloc();
@@ -30,7 +25,7 @@ void perlWrapper::interpretador(){
 }
 
 //my @pontuacoes = GerenciamentoDeDados::listaPontuacoesMaiores($arquivo, $n);
-vector<pair<string, unsigned>> perlWrapper::listaPontuacoesMaiores(string nomeArquivo, unsigned max) {
+int perlWrapper::listaPontuacoesMaiores(string nomeArquivo, unsigned max, vector<pair<string, unsigned>> &pontuacoes) {
     dSP;
     ENTER;
     SAVETMPS;
@@ -40,19 +35,27 @@ vector<pair<string, unsigned>> perlWrapper::listaPontuacoesMaiores(string nomeAr
     XPUSHs(sv_2mortal(newSViv(max)));
 
     PUTBACK;
-    call_pv("listaPontuacoesMaiores", G_ARRAY);
+    int count = call_pv("listaPontuacoesMaiores", G_ARRAY);
     SPAGAIN;
 
-    vector<pair<string, unsigned>> resultado;
-//    while(auto temp = POPi){
-//        resultado.push_back(temp, temp);
-//    }
+    pontuacoes.reserve(count/2);
+    unsigned pontos;
+
+    for (int i = 1; i < count + 1; ++i) {
+        if(i % 2 == 0){
+            pair<string, unsigned > par(POPp, pontos);
+            pontuacoes.push_back(par);
+        }
+        else{
+            pontos = POPu;
+        }
+    }
 
     PUTBACK;
     FREETMPS;
     LEAVE;
 
-    return resultado;
+    return 0;
 }
 
 //my $status = GerenciamentoDeDados::salvaPerfil($arquivo, $nome, $pontos, $dificuldade);
@@ -107,16 +110,18 @@ int perlWrapper::listaPontuacoesJogador(string nome, int restricao, string nomeA
     SAVETMPS;
     PUSHMARK(SP);
     XPUSHs(sv_2mortal(newSVpv(nome.c_str(),nome.length())));
+    XPUSHs(sv_2mortal(newSViv(restricao)));
     XPUSHs(sv_2mortal(newSVpv(nomeArquivo.c_str(),nomeArquivo.length())));
     PUTBACK;
-    call_pv("listaPontuacoesDeJogador", G_ARRAY);
+    int count = call_pv("listaPontuacoesDeJogador", G_ARRAY);
     SPAGAIN;
 
 
-    int status = POPi;
-    while(int pontos = POPi){
-        listaPontos.push_back(pontos);
+    for (int i = 1; i < count; ++i) {
+        listaPontos.push_back(POPi);
     }
+    int status = POPi;
+
     PUTBACK;
     FREETMPS;
     LEAVE;
@@ -136,14 +141,18 @@ vector <vector<string>> perlWrapper::configuraAparencia(string nomeArquivoPlayer
     int count = call_pv("configuraAparencia", G_ARRAY);
     SPAGAIN;
 
-    vector<string> sprites;
-    sprites.reserve(count);
+    vector<vector<string>> sprites;
+    vector<string> sprite;
     for (int i = 0; i < count; ++i) {
-        sprites.push_back(POPp);
-
+        string linha = POPp;
+        if(linha == "#"){
+            std::reverse(sprite.begin(), sprite.end());
+            sprites.push_back(sprite);
+            sprite.clear();
+        } else{
+            sprite.push_back(linha);
+        }
     }
-
-    std::reverse(sprites.begin(), sprites.end());
 
     PUTBACK;
     FREETMPS;

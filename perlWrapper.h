@@ -17,7 +17,7 @@ public:
 
     void interpretador();
 
-    vector<pair<string, unsigned>> listaPontuacoesMaiores(string nomeArquivo, unsigned max);
+    int listaPontuacoesMaiores(string nomeArquivo, unsigned max, vector<pair<string, unsigned>> &pontuacoes);
     int salvaPerfil(string nomeArquivo, string nome, unsigned pontos, float dificuldade);
     int leJogo(string nome, float dificuldade, string nomeArquivo, unsigned &pontuacao);
     int listaPontuacoesJogador(string nome, int restricao, string nomeArquivo, vector<unsigned> &listaPontos);

@@ -13,11 +13,25 @@ int main(){
     cout << "Le Jogo, status|pontos" << endl;
     unsigned temp;
     cout << pw.leJogo("raposo",6, "dadosTeste.txt", temp)  << " | " << temp << endl;
+    cout << "Aparencia" << endl;
     vector <vector<string>> sprites = pw.configuraAparencia("playerTeste.txt", "obstaculoTeste.txt");
     for (vector<string> sprite : sprites) {
         for (string linha : sprite){
             cout << linha << endl;
         }
+    }
+    vector <pair<string, unsigned>> pontuacoes;
+    pw.listaPontuacoesMaiores("dadosTeste.txt", 5, pontuacoes);
+    cout << "Maiores Pontuacoes:" << endl;
+    for (pair<string, unsigned> p : pontuacoes){
+        cout << p.first << " | " << p.second << endl;
+    }
+
+    cout << "Lista Por nome" << endl;
+    vector <unsigned > pontos;
+    pw.listaPontuacoesJogador("raposo", 1, "dadosTeste.txt", pontos);
+    for(unsigned p:pontos){
+        cout << p << endl;
     }
 
     return 0;

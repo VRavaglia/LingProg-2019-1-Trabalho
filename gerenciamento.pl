@@ -68,7 +68,14 @@ sub listaPontuacoesMaiores {
     if ($n < 0) {
         $n = 0;
     }
-    return splice @ordPontuacoes, $n;
+    my @nPontuacoes = splice @ordPontuacoes, $n;
+    my @nPontuacoesFormatada;
+    for my $i(0 .. scalar @nPontuacoes - 1){
+        push @nPontuacoesFormatada, $nPontuacoes[$i]{"nome"};
+        push @nPontuacoesFormatada, $nPontuacoes[$i]{"pontos"};
+    }
+
+    return @nPontuacoesFormatada;
 }
 
 
@@ -209,8 +216,6 @@ sub listaPontuacoesDeJogador {
             if ($nomeIterador =~ m/$nome/) {
                 push(@partidas, $pontuacaoIterador);
             }
-        } #if (defined $nomeIterador)
-        else {
         }
 
         if (@partidas == 0) {
@@ -307,15 +312,15 @@ sub configuraAparencia{
 
     for my $i(0 .. 1){
         for my $j(0 .. 2){
+            $aparenciasStrings[$n] = "#";
+            $n = $n +1;
             foreach(@{$aparencias[$i][$j]}){
                 $aparenciasStrings[$n] = $_;
                 $n = $n +1;
             }
-            $aparenciasStrings[$n] = "#";
-            $n = $n +1;
         }
     }
     return @aparenciasStrings;
 }
 
-configuraAparencia("playerTeste.txt", "obstaculoTeste.txt");
+print Dumper listaPontuacoesDeJogador("raposo", 1, "dadosTeste.txt");
