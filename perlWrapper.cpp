@@ -2,6 +2,12 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <algorithm>
+
+// TODO
+//  - my @pontuacoes = GerenciamentoDeDados::listaPontuacoesMaiores($arquivo, $n);
+//  - (@pontuacao, $status) = GerenciamentoDeDados::listaPontuacoesDeJogador($nome, $restricao, $arquivo);
+//  - @aparencias = GerenciamentoDeDados::configuraAparencia($arquivoPlayer, $arquivoObstaculo);
 
 perlWrapper::perlWrapper(){
     PERL_SYS_INIT3(NULL, NULL, NULL);
@@ -18,7 +24,7 @@ perlWrapper::~perlWrapper(){
 
 void perlWrapper::interpretador(){
     my_argv [0] = "";
-    my_argv [1] = "showtime.pl";
+    my_argv [1] = "gerenciamento.pl";
     perl_parse(my_perl, 0, 2, my_argv, (char **)NULL);
     perl_run(my_perl);
 }
@@ -38,9 +44,9 @@ vector<pair<string, unsigned>> perlWrapper::listaPontuacoesMaiores(string nomeAr
     SPAGAIN;
 
     vector<pair<string, unsigned>> resultado;
-    while(auto temp = POP){
-        resultado.push_back(temp, temp);
-    }
+//    while(auto temp = POPi){
+//        resultado.push_back(temp, temp);
+//    }
 
     PUTBACK;
     FREETMPS;
@@ -78,15 +84,14 @@ int perlWrapper::leJogo(string nome, float dificuldade, string nomeArquivo, unsi
     SAVETMPS;
     PUSHMARK(SP);
     XPUSHs(sv_2mortal(newSVpv(nome.c_str(),nome.length())));
+    XPUSHs(sv_2mortal(newSViv(dificuldade)));
     XPUSHs(sv_2mortal(newSVpv(nomeArquivo.c_str(),nomeArquivo.length())));
     PUTBACK;
     int count = call_pv("leJogoEmAndamento", G_ARRAY);
     SPAGAIN;
 
-    pontuacao = POPi;
     int status = POPi;
-    cout << pontuacao << endl;
-    cout << status << endl;
+    pontuacao = POPi;
 
     PUTBACK;
     FREETMPS;
@@ -120,7 +125,7 @@ int perlWrapper::listaPontuacoesJogador(string nome, int restricao, string nomeA
 }
 
 //@aparencias = GerenciamentoDeDados::configuraAparencia($arquivoPlayer, $arquivoObstaculo);
-vector<string> perlWrapper::configuraAparencia(string nomeArquivoPlayer, string nomeArquivoObstculo) {
+vector <vector<string>> perlWrapper::configuraAparencia(string nomeArquivoPlayer, string nomeArquivoObstculo) {
     dSP;
     ENTER;
     SAVETMPS;
@@ -128,18 +133,18 @@ vector<string> perlWrapper::configuraAparencia(string nomeArquivoPlayer, string 
     XPUSHs(sv_2mortal(newSVpv(nomeArquivoPlayer.c_str(),nomeArquivoPlayer.length())));
     XPUSHs(sv_2mortal(newSVpv(nomeArquivoObstculo.c_str(),nomeArquivoObstculo.length())));
     PUTBACK;
-    call_pv("configuraAparencia", G_ARRAY);
+    int count = call_pv("configuraAparencia", G_ARRAY);
     SPAGAIN;
 
     vector<string> sprites;
-    string sprite;
-    while(true){
-        sprite = POPp;
-        if(!sprite.empty()){
-            sprites.push_back(sprite);
-        } else{
-            break;
-        }}
+    sprites.reserve(count);
+    for (int i = 0; i < count; ++i) {
+        sprites.push_back(POPp);
+
+    }
+
+    std::reverse(sprites.begin(), sprites.end());
+
     PUTBACK;
     FREETMPS;
     LEAVE;

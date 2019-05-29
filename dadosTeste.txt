@@ -7,7 +7,7 @@
 ### nomeDoJogador|pontuacao
 
 ## Exemplos:
-raposo|2|2
+raposo|6666|6
 raposo|2143124
 pedrO|7645|4
 raposo|287

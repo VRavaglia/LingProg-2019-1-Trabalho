@@ -301,5 +301,21 @@ sub configuraAparencia{
     $aparencias[1][1] = \@aparenciaLvl1O;
     my @aparenciaLvl2O = converteLvl2(@aparenciaBaseO);
     $aparencias[1][2] = \@aparenciaLvl2O;
-    return @aparencias;
+
+    my @aparenciasStrings;
+    my $n = 0;
+
+    for my $i(0 .. 1){
+        for my $j(0 .. 2){
+            foreach(@{$aparencias[$i][$j]}){
+                $aparenciasStrings[$n] = $_;
+                $n = $n +1;
+            }
+            $aparenciasStrings[$n] = "#";
+            $n = $n +1;
+        }
+    }
+    return @aparenciasStrings;
 }
+
+configuraAparencia("playerTeste.txt", "obstaculoTeste.txt");
