@@ -3,8 +3,10 @@
 #include <iostream>
 #include "Desenhador.h"
 #include "Engine.h"
+#include "Menu.h"
 
 int main(){
     Engine engine;
-    engine.novoJogo();
+    Menu menu(engine);
+    menu.exibe();
 }
