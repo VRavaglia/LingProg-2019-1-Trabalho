@@ -185,3 +185,16 @@ void Desenhador::desenha(ListaSprites &sprites, Tela &tela) {
     escreveTela(tela);
 }
 
+vector<vector<char>> Desenhador::listaStringParaMatrizChar(std::vector<std::string> &vetor) {
+    vector<vector<char>> sprite;
+    for(string &linha : vetor){
+        vector<char> linhaNova;
+        for(char c : linha){
+            linhaNova.push_back(c);
+        }
+        sprite.push_back(linhaNova);
+    }
+
+    return sprite;
+}
+

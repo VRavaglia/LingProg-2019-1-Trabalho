@@ -14,17 +14,24 @@ public:
 
     /// Velocidade de reprodução do jogo
     float escalaDeTempo;
+    float gravidade;
 
     void addEntidade(Entidade &entidade);
     void removeEntidade(Entidade &entidade);
 
     /// Jogo em si
-    void novoJogo();
+    void novoJogo(unsigned dificuldade);
 
     /// Parametros de inicialização do jogador
     int pXInicio = 0;
-    int pYInicio = 30;
+    int pYInicio = 5;
     int pZInicio = 1;
+
+    int inicializaSprites(string nomeArquivoP, string nomeArquivoO);
+
+    /// Sprites do Player e Obstaculos
+    vector<vector<char>> matrizPlayer[3];
+    vector<vector<char>> matrizObstaculo[3];
 private:
 
     /// Cuida da parte visual, desenha na tela

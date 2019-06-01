@@ -6,8 +6,13 @@
 
 class Menu {
 public:
-    Menu(Engine &engine);
+    explicit Menu(Engine &engine);
+    
+    //Exibe o menu com as opcoes possiveis
     void exibe();
+
+private:
+    string msgAdicional;
 };
 
 

@@ -105,6 +105,9 @@ private:
 /// Desenha sprites no console
 class Desenhador{
 public:
+    /// Conversao de vetor de strings para matriz de caracteres
+    static std::vector <std::vector<char>> listaStringParaMatrizChar(std::vector<std::string> &vetor);
+
 
     /// Insere uma lista de sprites na tela
     void desenha(ListaSprites &sprites, Tela &tela);

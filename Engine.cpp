@@ -32,12 +32,13 @@ Engine::Engine() {
     rodando = true;
     frequencia = 10;
     escalaDeTempo = 1.0;
+    gravidade = 4.0;
 
 }
 
-void Engine::novoJogo() {
+void Engine::novoJogo(unsigned dificuldade = 1) {
 
-    Jogo jogo;
+    Jogo jogo(dificuldade);
     Tela tela(maxX, maxY);
 
     unsigned periodo = (unsigned int)(10E5/frequencia);
@@ -61,6 +62,7 @@ void Engine::novoJogo() {
         cout <<"FPS = " << fps << '\n';
         cout <<"Entidades = " << entidades.size() << '\n';
         cout <<"Escala de tempo = " << escalaDeTempo << endl;
+        cout << f << endl;
         //usleep(periodo);
         if (time(0) - now >= 1){
             now = time(0);
@@ -68,16 +70,9 @@ void Engine::novoJogo() {
             ciclos = 0;
             performace = fps/frequencia;
         }
-        if (f >= 10){
+        if (f >= 50){
             jogo.criaObstaculo(*this, maxX, maxY, 2);
             f = 0;
-            t += escalaDeTempo;
-        }
-        if (t>= 4){
-            escalaDeTempo = 0.5;
-        }
-        if (t>= 5.5){
-            escalaDeTempo = 2;
         }
 
     }
@@ -104,6 +99,9 @@ void Engine::removeEntidade(Entidade &entidade) {
 void Engine::attFisica(Entidade &entidade, float performace) {
     entidade.sprite.x += entidade.velocidade.x * escalaDeTempo*(1/frequencia)/performace;
     entidade.sprite.y += entidade.velocidade.y * escalaDeTempo*(1/frequencia)/performace;
+    if(entidade.sprite.y < maxY){
+        entidade.sprite.y += gravidade * escalaDeTempo*(1/frequencia)/performace;
+    }
 }
 
 void Engine::attGrafica(Entidade &entidade) {
@@ -131,4 +129,9 @@ void Engine::update(float performace) {
         }
     }
 
+}
+
+int Engine::inicializaSprites(string nomeArquivoP, string nomeArquivoO) {
+
+    return 0;
 }
