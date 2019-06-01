@@ -21,17 +21,20 @@ public:
 
     /// Jogo em si
     void novoJogo(unsigned dificuldade);
+    void carregaJogo(string nome, float dificuldadeP, unsigned pontuacao);
 
     /// Parametros de inicialização do jogador
     int pXInicio = 0;
     int pYInicio = 5;
     int pZInicio = 1;
 
-    int inicializaSprites(string nomeArquivoP, string nomeArquivoO);
+    // Inicia os sprites de player e obstaculos
+    int inicializaSprites();
 
     /// Sprites do Player e Obstaculos
     vector<vector<char>> matrizPlayer[3];
     vector<vector<char>> matrizObstaculo[3];
+
 private:
 
     /// Cuida da parte visual, desenha na tela

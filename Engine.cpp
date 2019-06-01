@@ -5,6 +5,7 @@
 #include <ctime>
 #include <unistd.h>
 #include <iostream>
+#include "perlWrapper.h"
 
 using namespace std;
 
@@ -131,7 +132,29 @@ void Engine::update(float performace) {
 
 }
 
-int Engine::inicializaSprites(string nomeArquivoP, string nomeArquivoO) {
+int Engine::inicializaSprites() {
+    perlWrapper pw;
+    pw.interpretador();
 
-    return 0;
+    cout << "Insira o nome do arquivo com a aparencia do Jogador: " << endl;
+    string aparenciaP;
+    cin >> aparenciaP;
+
+    cout << "Insira o nome do arquivo com a aparencia dos Obstaculos: " << endl;
+    string aparenciaO;
+    cin >> aparenciaO;
+    vector<vector<string>> aparencias = pw.configuraAparencia(aparenciaP,aparenciaO);
+
+    for (int i = 0; i < 6; ++i) {
+        if(i < 3){
+            matrizPlayer[i] = Desenhador::listaStringParaMatrizChar(aparencias.at(i));
+        }
+        else{
+            matrizObstaculo[i-3] = Desenhador::listaStringParaMatrizChar(aparencias.at(i-3));
+        }
+    }
+}
+
+void Engine::carregaJogo(string nome, float dificuldadeP, unsigned pontuacao) {
+
 }

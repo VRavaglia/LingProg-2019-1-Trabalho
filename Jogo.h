@@ -21,11 +21,8 @@ public:
     void criaPlayer(Engine &engine);
 
 private:
-    // Lista contendo os respectivos arquivos para cada sprite
-    const std::map<std::string, std::string> arquivosSprites ={
-            {"barreira", "barreira.txt"},
-            {"player", "player.txt"},
-    };
+    // Fase do jogo
+    int lvl;
 };
 
 

@@ -17,7 +17,12 @@ struct {
 
 void Sprite::setSprite(vector <vector <char>> &sprite_) {
     l = sprite_.size();
-    h = sprite_[0].size();
+    h = 0;
+    for(vector<char> &linha : sprite_){
+        if(linha.size() > h){
+            h = linha.size();
+        }
+    }
     sprite = sprite_;
 }
 
