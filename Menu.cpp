@@ -1,6 +1,14 @@
 #include <iostream>
+#include <limits>
 #include "Menu.h"
 #include "perlWrapper.h"
+
+void pressioneEnter()
+{
+    std::cout << "Aperte {ENTER} para continuar..." << flush;
+    char c;
+    cin >> c;
+}
 
 Menu::Menu(Engine &engine) {
     char opcao;
@@ -29,7 +37,7 @@ Menu::Menu(Engine &engine) {
                 unsigned dificuldade;
                 cin >> dificuldade;
 
-                if(!engine.inicializaSprites()){
+                if(engine.inicializaSprites()){
                     msgAdicional = "Erro na leitura das aparencias.";
                 }
                 else{
@@ -48,7 +56,7 @@ Menu::Menu(Engine &engine) {
                 unsigned pontuacao;
                 pw.leJogo(nome, dificuldadeP, nomeArquivo, pontuacao);
 
-                if(!engine.inicializaSprites()){
+                if(engine.inicializaSprites()){
                     msgAdicional = "Erro na leitura das aparencias.";
                 }
                 else{
@@ -64,18 +72,15 @@ Menu::Menu(Engine &engine) {
                 unsigned max;
                 cin >> max;
 
-
-
                 status =  pw.listaPontuacoesMaiores(nomeArquivo, max, pontuacoes);
-                if(!status){
+                if(status){
                     msgAdicional = "Erro na leitura dos arquivo de pontuacoes.";
                 }
                 else{
                     for(auto &par : pontuacoes){
                         cout << "Perfil: " << par.first << " | Pontuacao: " << par.second << endl;
                     }
-                    cout << "Aperte {ENTER} para continuar." << endl;
-                    cin;
+                    pressioneEnter();
                 }
                 break;
 
@@ -91,16 +96,15 @@ Menu::Menu(Engine &engine) {
                 unsigned restricao;
                 cin >> restricao;
                 status = pw.listaPontuacoesJogador(nome, restricao, nomeArquivo, listaPontos);
-                if(!status){
+                if(status){
                     msgAdicional = "Erro na leitura dos arquivo de pontuacoes.";
                 }
-                else{
+                else {
                     cout << "Pontuacoes obtidas pelo jogador " << nome << ": " << endl;
-                    for(auto &ponto : listaPontos){
+                    for (auto &ponto : listaPontos) {
                         cout << ponto << endl;
                     }
-                    cout << "Aperte {ENTER} para continuar." << endl;
-                    cin;
+                    pressioneEnter();
                 }
                 break;
 

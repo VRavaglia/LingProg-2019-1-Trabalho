@@ -153,6 +153,7 @@ int Engine::inicializaSprites() {
             matrizObstaculo[i-3] = Desenhador::listaStringParaMatrizChar(aparencias.at(i-3));
         }
     }
+    return 0;
 }
 
 void Engine::carregaJogo(string nome, float dificuldadeP, unsigned pontuacao) {
