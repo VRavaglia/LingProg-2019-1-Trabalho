@@ -28,5 +28,6 @@ void Jogo::criaPlayer(Engine &engine) {
     player.sprite = sprite;
     player.addComponente(Componente::PLAYER);
     player.addComponente(Componente::COLISAO);
+    player.addComponente(Componente::GRAVIDADE);
     engine.addEntidade(player);
 }

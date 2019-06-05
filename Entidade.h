@@ -5,7 +5,7 @@
 #include "Utilidades.h"
 
 /// Lista de características especiais que classificam a entidade
-enum Componente {OBSTACULO = 2, COLISAO = 3, PLAYER = 5};
+enum Componente {OBSTACULO = 2, COLISAO = 3, PLAYER = 5, GRAVIDADE = 7};
 
 /// Checa se um componente pertence a lista
 bool contemComponente(Componente componente, unsigned componentes);

@@ -64,7 +64,8 @@ void Engine::novoJogo(unsigned dificuldade = 1) {
         cout <<"Entidades = " << entidades.size() << '\n';
         cout <<"Escala de tempo = " << escalaDeTempo << endl;
         cout << f << endl;
-        //usleep(periodo);
+        cout << entidades.at(0).sprite.y << endl;
+        usleep(periodo);
         if (time(0) - now >= 1){
             now = time(0);
             fps = ciclos;
@@ -100,7 +101,7 @@ void Engine::removeEntidade(Entidade &entidade) {
 void Engine::attFisica(Entidade &entidade, float performace) {
     entidade.sprite.x += entidade.velocidade.x * escalaDeTempo*(1/frequencia)/performace;
     entidade.sprite.y += entidade.velocidade.y * escalaDeTempo*(1/frequencia)/performace;
-    if(entidade.sprite.y < maxY){
+    if(contemComponente(Componente::GRAVIDADE, entidade.getComponentes()) && entidade.sprite.y < (maxY + entidade.sprite.H())){
         entidade.sprite.y += gravidade * escalaDeTempo*(1/frequencia)/performace;
     }
 }
@@ -145,12 +146,13 @@ int Engine::inicializaSprites() {
     cin >> aparenciaO;
     vector<vector<string>> aparencias = pw.configuraAparencia(aparenciaP,aparenciaO);
 
+
     for (int i = 0; i < 6; ++i) {
         if(i < 3){
             matrizPlayer[i] = Desenhador::listaStringParaMatrizChar(aparencias.at(i));
         }
         else{
-            matrizObstaculo[i-3] = Desenhador::listaStringParaMatrizChar(aparencias.at(i-3));
+            matrizObstaculo[i-3] = Desenhador::listaStringParaMatrizChar(aparencias.at(i));
         }
     }
     return 0;

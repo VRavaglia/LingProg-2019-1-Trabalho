@@ -158,5 +158,6 @@ vector <vector<string>> perlWrapper::configuraAparencia(string nomeArquivoPlayer
     FREETMPS;
     LEAVE;
 
+    std::reverse(sprites.begin(), sprites.end());
     return sprites;
 }

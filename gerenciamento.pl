@@ -322,5 +322,3 @@ sub configuraAparencia{
     }
     return @aparenciasStrings;
 }
-
-print Dumper listaPontuacoesDeJogador("raposo", 1, "dadosTeste.txt");
