@@ -19,10 +19,10 @@ bool checaForaDaTela(Entidade &entidade, unsigned maxX, unsigned maxY){
     if (entidade.sprite.y > maxY){
         return true;
     }
-    if (entidade.sprite.x - entidade.sprite.L() < 0){
+    if (entidade.sprite.x + entidade.sprite.L() < 0){
         return true;
     }
-    if (entidade.sprite.y - entidade.sprite.H() < 0){
+    if (entidade.sprite.y + entidade.sprite.H() < 0){
         return true;
     }
 
@@ -33,18 +33,18 @@ Engine::Engine() {
     rodando = true;
     frequencia = 10;
     escalaDeTempo = 1.0;
-    gravidade = 4.0;
+    gravidade = 5.0;
 
 }
 
-void Engine::novoJogo(unsigned dificuldade = 1) {
+void Engine::novoJogo(unsigned dificuldade = 1, unsigned pontos = 0) {
 
     Jogo jogo(dificuldade);
-    Tela tela(maxX, maxY);
+    Tela tela(maxX, maxY, true);
 
     unsigned periodo = (unsigned int)(10E5/frequencia);
     unsigned ciclos = 1;
-    unsigned fps = 0;
+    float fps = 0;
     time_t now = time(0);
 
     float f = 0;
@@ -60,11 +60,14 @@ void Engine::novoJogo(unsigned dificuldade = 1) {
         desenhador.desenha(batch, tela);
         ciclos++;
         f += escalaDeTempo;
+        pontos += (int)(escalaDeTempo*(1/frequencia)/performace*dificuldade*pontosPorSegundo);
+        cout << "Pontuacao: " << pontos << '\n';
+        cout << "Dificuldade: " << dificuldade << '\n';
         cout <<"FPS = " << fps << '\n';
         cout <<"Entidades = " << entidades.size() << '\n';
-        cout <<"Escala de tempo = " << escalaDeTempo << endl;
+        cout <<"Escala de tempo = " << escalaDeTempo << '\n';
         cout << f << endl;
-        cout << entidades.at(0).sprite.y << endl;
+        cout << "Pos Player: (" << entidades.at(0).sprite.x << "," << entidades.at(0).sprite.y << ")" << '\n';
         usleep(periodo);
         if (time(0) - now >= 1){
             now = time(0);
@@ -72,7 +75,7 @@ void Engine::novoJogo(unsigned dificuldade = 1) {
             ciclos = 0;
             performace = fps/frequencia;
         }
-        if (f >= 50){
+        if (f >= 30){
             jogo.criaObstaculo(*this, maxX, maxY, 2);
             f = 0;
         }
@@ -101,7 +104,7 @@ void Engine::removeEntidade(Entidade &entidade) {
 void Engine::attFisica(Entidade &entidade, float performace) {
     entidade.sprite.x += entidade.velocidade.x * escalaDeTempo*(1/frequencia)/performace;
     entidade.sprite.y += entidade.velocidade.y * escalaDeTempo*(1/frequencia)/performace;
-    if(contemComponente(Componente::GRAVIDADE, entidade.getComponentes()) && entidade.sprite.y < (maxY + entidade.sprite.H())){
+    if(contemComponente(Componente::GRAVIDADE, entidade.getComponentes()) && entidade.sprite.y < (maxY)){
         entidade.sprite.y += gravidade * escalaDeTempo*(1/frequencia)/performace;
     }
 }
@@ -144,6 +147,15 @@ int Engine::inicializaSprites() {
     cout << "Insira o nome do arquivo com a aparencia dos Obstaculos: " << endl;
     string aparenciaO;
     cin >> aparenciaO;
+
+    if(aparenciaP == "1"){
+        aparenciaP = "playerTeste.txt";
+    }
+
+    if(aparenciaO == "1"){
+        aparenciaO = "obstaculoTeste.txt";
+    }
+
     vector<vector<string>> aparencias = pw.configuraAparencia(aparenciaP,aparenciaO);
 
 

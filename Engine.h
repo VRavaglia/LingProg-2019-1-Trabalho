@@ -20,7 +20,7 @@ public:
     void removeEntidade(Entidade &entidade);
 
     /// Jogo em si
-    void novoJogo(unsigned dificuldade);
+    void novoJogo(unsigned dificuldade, unsigned pontos);
     void carregaJogo(string nome, float dificuldadeP, unsigned pontuacao);
 
     /// Parametros de inicialização do jogador
@@ -34,6 +34,9 @@ public:
     /// Sprites do Player e Obstaculos
     vector<vector<char>> matrizPlayer[3];
     vector<vector<char>> matrizObstaculo[3];
+
+    /// Pontos obtidos por segundo
+    unsigned pontosPorSegundo = 10;
 
 private:
 

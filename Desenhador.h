@@ -73,7 +73,7 @@ private:
 class Tela{
 public:
     /// Inicializa a matriz de caracteres
-    Tela(unsigned maxX, unsigned maxY);
+    Tela(unsigned maxX, unsigned maxY, bool frame);
 
     /// Preenche a matriz com caracteres ' '
     void limpa();
@@ -90,11 +90,16 @@ public:
     /// Retorna o caractere contido em uma determinada posição da matriz
     char getPixel(size_t x, size_t y);
 
-private:
+    /// Define se ha contorno indicando os limites da tela
+    bool frame;
 
     /// Tamanho da tela
     unsigned maxX = 80;
     unsigned maxY = 16;
+
+private:
+
+
 
     /// Matriz de caracteres
     std::vector <std::vector<char>> tela;

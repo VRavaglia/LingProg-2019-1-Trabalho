@@ -18,8 +18,9 @@ perlWrapper::~perlWrapper(){
 }
 
 void perlWrapper::interpretador(){
-    my_argv [0] = "";
-    my_argv [1] = "gerenciamento.pl";
+    char _MYARGV_PERL_MODULE_NAME[] = "gerenciamento.pl"; //retira warnings
+    char _MYARGV_NOTHING_NAME[] = ""; //retira warnings
+    char *my_argv[] = {static_cast<char*> (_MYARGV_NOTHING_NAME), static_cast<char*> (_MYARGV_PERL_MODULE_NAME)};
     perl_parse(my_perl, 0, 2, my_argv, (char **)NULL);
     perl_run(my_perl);
 }

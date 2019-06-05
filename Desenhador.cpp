@@ -16,11 +16,11 @@ struct {
 } spriteLessZ;
 
 void Sprite::setSprite(vector <vector <char>> &sprite_) {
-    l = sprite_.size();
-    h = 0;
+    h = sprite_.size();
+    l = 0;
     for(vector<char> &linha : sprite_){
-        if(linha.size() > h){
-            h = linha.size();
+        if(linha.size() > l){
+            l = linha.size();
         }
     }
     sprite = sprite_;
@@ -112,9 +112,10 @@ void initMatrix(){
 }
 
 
-Tela::Tela(unsigned maxX_, unsigned maxY_){
+Tela::Tela(unsigned maxX_, unsigned maxY_, bool frame_){
     maxX = maxX_;
     maxY = maxY_;
+    frame = frame_;
     // Inicializa a matriz de caracteres
     for (size_t x = 0; x < Tela::L(); ++x) {
         size_t H = Tela::H();
@@ -171,6 +172,10 @@ void Desenhador::escreveTela(Tela &tela) {
 void Desenhador::desenha(ListaSprites &sprites, Tela &tela) {
     tela.limpa();
     size_t tamanhoLista = sprites.getSprites().size();
+    int f = 0;
+    if (tela.frame){
+        f = 1;
+    }
 
     // Adiciona as informações de cada sprite na tela
     for (size_t i = 0; i < tamanhoLista; ++i) {
@@ -181,9 +186,23 @@ void Desenhador::desenha(ListaSprites &sprites, Tela &tela) {
             for (size_t x = 0; x < sizeY; ++x){
                 char pixel = sprite.getSprite().at(y).at(x);
                 if (pixel && pixel != ' '){
-                    tela.setPixel(round(x) + sprite.x, round(y) + sprite.y - sprite.H(), pixel);
+                    tela.setPixel(round(x) + sprite.x + f, round(y) + sprite.y - sprite.H() - f, pixel);
                 }
             }
+        }
+    }
+    if(tela.frame){
+        for(unsigned i = 0; i < tela.maxX; i++){
+            tela.setPixel(i,1,'#');
+        }
+        for(unsigned i = 0; i < tela.maxX; i++){
+            tela.setPixel(i,tela.maxY - 1,'#');
+        }
+        for(unsigned i = 0; i < tela.maxY; i++){
+            tela.setPixel(0,i,'#');
+        }
+        for(unsigned i = 0; i < tela.maxY; i++){
+            tela.setPixel(tela.maxX - 1,i,'#');
         }
     }
     system("clear");

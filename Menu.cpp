@@ -41,7 +41,7 @@ Menu::Menu(Engine &engine) {
                     msgAdicional = "Erro na leitura das aparencias.";
                 }
                 else{
-                    engine.novoJogo(dificuldade);
+                    engine.novoJogo(dificuldade,0);
                 }
 
                 break;
