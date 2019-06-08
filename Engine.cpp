@@ -12,17 +12,17 @@ using namespace std;
 const unsigned maxX = 140;
 const unsigned maxY = 30;
 
-bool checaForaDaTela(Entidade &entidade, unsigned maxX, unsigned maxY){
-    if (entidade.sprite.x > maxX){
+bool checaForaDaTela(Entidade *entidade, unsigned maxX, unsigned maxY){
+    if (entidade->sprite.x > maxX){
         return true;
     }
-    if (entidade.sprite.y > maxY){
+    if (entidade->sprite.y > maxY){
         return true;
     }
-    if (entidade.sprite.x + entidade.sprite.L() < 0){
+    if (entidade->sprite.x + entidade->sprite.L() < 0){
         return true;
     }
-    if (entidade.sprite.y + entidade.sprite.H() < 0){
+    if (entidade->sprite.y + entidade->sprite.H() < 0){
         return true;
     }
 
@@ -30,19 +30,20 @@ bool checaForaDaTela(Entidade &entidade, unsigned maxX, unsigned maxY){
 }
 
 Engine::Engine() {
-    rodando = true;
     frequencia = 10;
     escalaDeTempo = 1.0;
     gravidade = 5.0;
 
 }
 
-void Engine::novoJogo(unsigned dificuldade = 1, unsigned pontos = 0) {
+void Engine::novoJogo(float dificuldade = 1, unsigned pontos = 0) {
 
     Jogo jogo(dificuldade);
     Tela tela(maxX, maxY, true);
 
-    unsigned periodo = (unsigned int)(10E5/frequencia);
+    status = Status::rodando;
+
+    unsigned long periodo = (unsigned long)(10E5/frequencia);
     unsigned ciclos = 1;
     float fps = 0;
     time_t now = time(0);
@@ -55,7 +56,7 @@ void Engine::novoJogo(unsigned dificuldade = 1, unsigned pontos = 0) {
     jogo.criaPlayer(*this);
 
     // Loop do jogo
-    while(rodando){
+    while(status != Status::sair){
         update(performace);
         desenhador.desenha(batch, tela);
         ciclos++;
@@ -67,7 +68,8 @@ void Engine::novoJogo(unsigned dificuldade = 1, unsigned pontos = 0) {
         cout <<"Entidades = " << entidades.size() << '\n';
         cout <<"Escala de tempo = " << escalaDeTempo << '\n';
         cout << f << endl;
-        cout << "Pos Player: (" << entidades.at(0).sprite.x << "," << entidades.at(0).sprite.y << ")" << '\n';
+        cout << "Pos Player: (" << entidades.at(0)->sprite.x << "," << entidades.at(0)->sprite.y << ")" << '\n';
+        cout << "Numero de colisoes: " << colisoes.size()/2 << "\n";
         usleep(periodo);
         if (time(0) - now >= 1){
             now = time(0);
@@ -83,54 +85,66 @@ void Engine::novoJogo(unsigned dificuldade = 1, unsigned pontos = 0) {
     }
 }
 
-void Engine::addEntidade(Entidade &entidade) {
+void Engine::addEntidade(Entidade *entidade) {
     entidades.push_back(entidade);
 }
 
-void Engine::removeEntidade(Entidade &entidade) {
+void Engine::removeEntidade(Entidade *entidade) {
     int i = -1;
     // Necessita de otimização
     for (int j = 0; j < entidades.size(); ++j) {
-        if (&entidades[j] == &entidade){
+        if (entidades[j] == entidade){
             i = j;
         }
     }
     if (i >= 0){
-        // Por enquanto o próprio coletor de lixo lida com a entidade removida, possivelmente tratar de maneira melhor
+        Entidade *temp = entidade;
         entidades.erase(entidades.begin() + i);
+        delete temp;
     }
 }
 
-void Engine::attFisica(Entidade &entidade, float performace) {
-    entidade.sprite.x += entidade.velocidade.x * escalaDeTempo*(1/frequencia)/performace;
-    entidade.sprite.y += entidade.velocidade.y * escalaDeTempo*(1/frequencia)/performace;
-    if(contemComponente(Componente::GRAVIDADE, entidade.getComponentes()) && entidade.sprite.y < (maxY)){
-        entidade.sprite.y += gravidade * escalaDeTempo*(1/frequencia)/performace;
+void Engine::attFisica(Entidade *entidade, float performace) {
+    entidade->sprite.x += entidade->velocidade.x * escalaDeTempo*(1/frequencia)/performace;
+    entidade->sprite.y += entidade->velocidade.y * escalaDeTempo*(1/frequencia)/performace;
+    if(contemComponente(Componente::GRAVIDADE, entidade->getComponentes()) && entidade->sprite.y < (maxY)){
+        entidade->sprite.y += gravidade * escalaDeTempo*(1/frequencia)/performace;
     }
 }
 
-void Engine::attGrafica(Entidade &entidade) {
+void Engine::attGrafica(Entidade *entidade) {
     // Por enquanto reescrevendo todos os sprites a cada frame
     // posteriormente possivelmente fazer isso apenas em caso de alteração
-    batch.addSprite(entidade.sprite);
+    batch.addSprite(entidade->sprite);
 }
 
-void Engine::emForaDaTela(Entidade &entidade) {
-    if (contemComponente(Componente::OBSTACULO, entidade.getComponentes())){
+void Engine::emForaDaTela(Entidade *entidade) {
+    if (contemComponente(Componente::OBSTACULO, entidade->getComponentes())){
         removeEntidade(entidade);
     }
 }
 
 void Engine::update(float performace) {
     batch.limpa();
+    colisoes.clear();
     for (size_t i = 0; i < entidades.size(); ++i) {
-        Entidade *entidade = &entidades[i];
-        attFisica(*entidade, performace);
-        attGrafica(*entidade);
-        if (checaForaDaTela(*entidade, maxX, maxY)){
+        Entidade *entidade = entidades[i];
+        attFisica(entidade, performace);
+        attGrafica(entidade);
+        if (checaForaDaTela(entidade, maxX, maxY)){
             entidade->emForaDaTela();
-            Engine::emForaDaTela(*entidade);
+            Engine::emForaDaTela(entidade);
 
+        }
+
+        for (size_t j = 0; j < entidades.size(); ++j){
+            Entidade *a = entidades.at(i);
+            Entidade *b = entidades.at(j);
+            if(colidem(a, b)){
+                pair<Entidade *, Entidade *> p(a,b);
+                a->emColisao();
+                colisoes.push_back(p);
+            }
         }
     }
 
@@ -170,6 +184,19 @@ int Engine::inicializaSprites() {
     return 0;
 }
 
-void Engine::carregaJogo(string nome, float dificuldadeP, unsigned pontuacao) {
+void Engine::carregaJogo(float dificuldadeP, unsigned pontuacao) {
+    novoJogo(dificuldadeP, pontuacao);
+}
 
+bool Engine::colidem(Entidade *a, Entidade *b) {
+
+    if(contemComponente(Componente::COLISAO, a->getComponentes()) && contemComponente(Componente::COLISAO, b->getComponentes())){
+        if(a->sprite.x < b->sprite.x + b->sprite.L() &&
+           a->sprite.x + a->sprite.L() > b->sprite.x &&
+           a->sprite.y < b->sprite.y + b->sprite.H() &&
+           a->sprite.y + a->sprite.H() > b->sprite.y){
+            return true;
+        }
+    }
+    return false;
 }

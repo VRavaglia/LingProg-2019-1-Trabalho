@@ -1,5 +1,6 @@
 #include "Entidade.h"
 #include "Utilidades.h"
+#include "Engine.h"
 
 bool contemComponente(Componente componente, unsigned componentes){
 
@@ -13,7 +14,11 @@ bool contemComponente(Componente componente, unsigned componentes){
 Entidade::Entidade(): velocidade (vec2<float>(0,0)){
 }
 
-void Entidade::emForaDaTela() {
+void Entidade::emForaDaTela(Engine *engine) {
+}
+
+void Entidade::emColisao(Engine *engine) {
+
 }
 
 void Entidade::addComponente(Componente componente) {
@@ -28,4 +33,8 @@ void Entidade::removeComponente(Componente componente) {
 
 unsigned Entidade::getComponentes() {
     return componentes;
+}
+
+void Player::emColisao(Engine *engine) {
+    //engine->status = Status::sair;
 }

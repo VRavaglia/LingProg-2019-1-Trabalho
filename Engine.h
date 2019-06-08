@@ -5,6 +5,8 @@
 #include "Entidade.h"
 #include <vector>
 
+enum Status{rodando, sair, pausado};
+
 /// Classe que controla o andamento do jogo
 class Engine {
 public:
@@ -16,12 +18,12 @@ public:
     float escalaDeTempo;
     float gravidade;
 
-    void addEntidade(Entidade &entidade);
-    void removeEntidade(Entidade &entidade);
+    void addEntidade(Entidade *entidade);
+    void removeEntidade(Entidade *entidade);
 
     /// Jogo em si
-    void novoJogo(unsigned dificuldade, unsigned pontos);
-    void carregaJogo(string nome, float dificuldadeP, unsigned pontuacao);
+    void novoJogo(float dificuldade, unsigned pontos);
+    void carregaJogo(float dificuldadeP, unsigned pontuacao);
 
     /// Parametros de inicialização do jogador
     int pXInicio = 0;
@@ -38,30 +40,37 @@ public:
     /// Pontos obtidos por segundo
     unsigned pontosPorSegundo = 10;
 
+    /// Status do jogo
+    Status  status;
+
 private:
 
     /// Cuida da parte visual, desenha na tela
     Desenhador desenhador;
 
     /// Atualizações relacionadas a física do jogo
-    void attFisica(Entidade &entidade, float fps);
+    void attFisica(Entidade *entidade, float fps);
+
+    /// Detecta se houve colisao entre duas entidades
+    bool colidem(Entidade *a, Entidade *b);
 
     /// Atualizações relacionadas a parte gráfica
-    void attGrafica(Entidade &entidade);
+    void attGrafica(Entidade *entidade);
 
     /// Chamada quando uma entidade se encontra fora da tela
-    void emForaDaTela(Entidade &entidade);
+    void emForaDaTela(Entidade *entidade);
 
     ListaSprites batch;
-
-    /// Ainda sem implementação, status se o jogo deve continuar rodando
-    bool rodando;
 
     /// Frequência de atualização do jogo (tentativa de fps)
     float frequencia;
 
     /// Lista de entidades ativas no jogo
-    std::vector <Entidade> entidades;
+    std::vector <Entidade *> entidades;
+
+    /// Lista de colisoes
+    vector <pair<Entidade *, Entidade*>> colisoes;
+
 
 
 

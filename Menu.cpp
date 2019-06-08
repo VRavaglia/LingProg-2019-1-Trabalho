@@ -60,7 +60,7 @@ Menu::Menu(Engine &engine) {
                     msgAdicional = "Erro na leitura das aparencias.";
                 }
                 else{
-                    engine.carregaJogo(nome, dificuldadeP, pontuacao);
+                    engine.carregaJogo(dificuldadeP, pontuacao);
                 }
 
 
@@ -125,6 +125,7 @@ void Menu::exibe() {
     cout << "| 2 ------------------ Carregar Jogo|\n";
     cout << "| 3 ----- Lista N maiores pontuacoes|\n";
     cout << "| 4 - Lista pontuacoes de um jogador|\n";
+    cout << "| 5 ------------- Lista jogos salvos|\n";
     cout << "|===================================|\n";
     cout << msgAdicional << endl;
     cout << "Ensira a opcao desejada:" << endl;

@@ -3,6 +3,7 @@
 
 #include "Desenhador.h"
 #include "Utilidades.h"
+#include "Engine.h"
 
 /// Lista de características especiais que classificam a entidade
 enum Componente {OBSTACULO = 2, COLISAO = 3, PLAYER = 5, GRAVIDADE = 7};
@@ -21,7 +22,10 @@ public:
     vec2<float> velocidade;
 
     /// Chamada quando a entidade se encontra fora da tela
-    void emForaDaTela();
+    virtual void emForaDaTela(Engine *engine);
+
+    /// Chamada quando colide
+    virtual void emColisao(Engine *engine);
 
     void addComponente(Componente componente);
     void removeComponente(Componente componente);
@@ -31,6 +35,10 @@ private:
     /// Soma de todos os componentes
     unsigned componentes = 1;
 
+};
+
+class Player: public Entidade{
+    virtual void emColisao(Engine *engine);
 };
 
 
