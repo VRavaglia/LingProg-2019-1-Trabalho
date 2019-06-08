@@ -89,6 +89,16 @@ size_t Sprite::H() {
     return h;
 }
 
+std::ostream & operator<<(std::ostream &out, Sprite &sprite) {
+    for(auto linha : sprite.getSprite()){
+        for(auto c : linha){
+            cout << c;
+        }
+        cout << "\n";
+    }
+    return out;
+}
+
 void ListaSprites::addSprite(Sprite &sprite) {
     sprites.push_back(sprite);
     ordenaSpritesPorZ();
@@ -139,7 +149,7 @@ size_t Tela::L() {
 }
 
 void Tela::setPixel(size_t x, size_t y, char pixel) {
-    if (x < maxX and x >= 0 and y < maxY and y > 0 ){
+    if (x < maxX && x >= 0 && y < maxY && y > 0 ){
         tela.at(x).at(y) = pixel;
     }
 
@@ -161,11 +171,13 @@ void Tela::limpa() {
 
 void Desenhador::escreveTela(Tela &tela) {
     // Imprime os caracteres da tela no console
+    string teste;
     for (size_t y = 0; y < tela.H(); ++y) {
         for (size_t x = 0; x < tela.L(); ++x) {
             cout << tela.getPixel(x,y);
         }
         cout << '\n';
+        //cin >> teste;
     }
 }
 
@@ -185,7 +197,7 @@ void Desenhador::desenha(ListaSprites &sprites, Tela &tela) {
             size_t sizeY = sprite.getSprite().at(y).size();
             for (size_t x = 0; x < sizeY; ++x){
                 char pixel = sprite.getSprite().at(y).at(x);
-                if (pixel && pixel != ' '){
+                if (pixel != ' '){
                     tela.setPixel(round(x) + sprite.x + f, round(y) + sprite.y - sprite.H() - f, pixel);
                 }
             }
@@ -215,6 +227,9 @@ vector<vector<char>> Desenhador::listaStringParaMatrizChar(std::vector<std::stri
         vector<char> linhaNova;
         for(char c : linha){
             linhaNova.push_back(c);
+        }
+        if (linhaNova.at(linhaNova.size() - 1) == '\r' || linhaNova.at(linhaNova.size() - 1) == '\t' || linhaNova.at(linhaNova.size() - 1) == '\n'){
+            linhaNova.pop_back();
         }
         sprite.push_back(linhaNova);
     }

@@ -43,7 +43,7 @@ void Engine::novoJogo(float dificuldade = 1, unsigned pontos = 0) {
 
     status = Status::rodando;
 
-    unsigned long periodo = (unsigned long)(10E5/frequencia);
+    unsigned periodo = (unsigned int)(10E5/frequencia);
     unsigned ciclos = 1;
     float fps = 0;
     time_t now = time(0);
@@ -68,7 +68,8 @@ void Engine::novoJogo(float dificuldade = 1, unsigned pontos = 0) {
         cout <<"Entidades = " << entidades.size() << '\n';
         cout <<"Escala de tempo = " << escalaDeTempo << '\n';
         cout << f << endl;
-        cout << "Pos Player: (" << entidades.at(0)->sprite.x << "," << entidades.at(0)->sprite.y << ")" << '\n';
+        cout << "Pos Player: (" << entidades.at(0)->sprite.x << "," << entidades.at(0)->sprite.y << ")" << " Tamanho(H,L): (" << entidades.at(0)->sprite.H()<< "," << entidades.at(0)->sprite.L() << ")\n";
+        cout << "Pos OBS: (" << entidades.at(entidades.size() - 1)->sprite.x << "," << entidades.at(entidades.size() - 1)->sprite.y << ")" << " Tamanho(H,L): (" << entidades.at(entidades.size() - 1)->sprite.H()<< "," << entidades.at(entidades.size() - 1)->sprite.L() << ")\n";
         cout << "Numero de colisoes: " << colisoes.size()/2 << "\n";
         usleep(periodo);
         if (time(0) - now >= 1){
@@ -80,9 +81,15 @@ void Engine::novoJogo(float dificuldade = 1, unsigned pontos = 0) {
         if (f >= 30){
             jogo.criaObstaculo(*this, maxX, maxY, 2);
             f = 0;
-        }
 
+            update(performace);
+            desenhador.desenha(batch, tela);
+        }
     }
+
+    system("clear");
+    cout << "Você perdeu, seu bosta!" << endl;
+    cin >> f;
 }
 
 void Engine::addEntidade(Entidade *entidade) {
@@ -128,6 +135,21 @@ void Engine::update(float performace) {
     batch.limpa();
     colisoes.clear();
     for (size_t i = 0; i < entidades.size(); ++i) {
+        for (size_t j = 0; j < entidades.size(); ++j){
+            if(i != j){
+                Entidade *a = entidades.at(i);
+                Entidade *b = entidades.at(j);
+                if(colidem(a, b)){
+                    pair<Entidade *, Entidade *> p(a,b);
+                    a->emColisao();
+                    if(contemComponente(Componente::PLAYER, a->getComponentes())){
+                        this->status = Status::sair;
+                    }
+                    colisoes.push_back(p);
+                }
+            }
+        }
+
         Entidade *entidade = entidades[i];
         attFisica(entidade, performace);
         attGrafica(entidade);
@@ -137,16 +159,9 @@ void Engine::update(float performace) {
 
         }
 
-        for (size_t j = 0; j < entidades.size(); ++j){
-            Entidade *a = entidades.at(i);
-            Entidade *b = entidades.at(j);
-            if(colidem(a, b)){
-                pair<Entidade *, Entidade *> p(a,b);
-                a->emColisao();
-                colisoes.push_back(p);
-            }
-        }
+
     }
+
 
 }
 
@@ -191,10 +206,10 @@ void Engine::carregaJogo(float dificuldadeP, unsigned pontuacao) {
 bool Engine::colidem(Entidade *a, Entidade *b) {
 
     if(contemComponente(Componente::COLISAO, a->getComponentes()) && contemComponente(Componente::COLISAO, b->getComponentes())){
-        if(a->sprite.x < b->sprite.x + b->sprite.L() &&
-           a->sprite.x + a->sprite.L() > b->sprite.x &&
-           a->sprite.y < b->sprite.y + b->sprite.H() &&
-           a->sprite.y + a->sprite.H() > b->sprite.y){
+        if((int)a->sprite.x <= (int)b->sprite.x + (int)b->sprite.L() &&
+        (int)a->sprite.x + (int)a->sprite.L() >= (int)b->sprite.x &&
+        (int)a->sprite.y >= (int)b->sprite.y - (int)b->sprite.H() &&
+        (int)a->sprite.y - (int)a->sprite.H() <= (int)b->sprite.y){
             return true;
         }
     }

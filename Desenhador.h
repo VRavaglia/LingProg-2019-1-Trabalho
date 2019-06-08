@@ -5,10 +5,12 @@
 
 #include <string>
 #include <vector>
+#include <iostream>
 
 
 /// Classe que armazena uma matriz de char para ser lido como um sprite
 class Sprite{
+    friend std::ostream & operator<<(std::ostream &out, Sprite &sprite);
 public:
     ///Cria um sprite a partir de um arquivo texto, posições no espaço (x e y) e ordem em que vai ser desenhado (profundidade z)
     Sprite();

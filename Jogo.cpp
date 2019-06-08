@@ -24,7 +24,7 @@ void Jogo::criaObstaculo(Engine &engine, float x, float y, unsigned z) {
 void Jogo::criaPlayer(Engine &engine) {
     //string nomeArquivo = "Sprites/" + arquivosSprites.at("player");
     Entidade *player = new Entidade;
-    Sprite sprite(engine.matrizPlayer[lvl - 1], engine.pXInicio, engine.pYInicio, engine.pZInicio);
+    Sprite sprite(engine.matrizPlayer[lvl - 1], engine.pXInicio, engine.pYInicio, 10);
     player->sprite = sprite;
     player->addComponente(Componente::PLAYER);
     player->addComponente(Componente::COLISAO);
