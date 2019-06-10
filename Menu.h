@@ -3,6 +3,7 @@
 #define TRABALHO_MENU_H
 
 #include "Engine.h"
+#include "VariaveisConfig.h"
 
 class Menu {
 public:

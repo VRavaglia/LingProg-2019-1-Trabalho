@@ -267,7 +267,7 @@ sub converteLvl2{
             if ($i > 0 and $i < (scalar @aparencia - 1)) {
                 if ($aparencia[$i - 1] =~ /^.{$temp}\s/gm) {
                     if ($aparencia[$i + 1] =~ /^.{$temp}\s/gm) {
-                        my $char = chr(254);
+                        my $char = '!';
                         substr($aparencia[$i + 1],$temp,1,$char);
                         substr($aparencia[$i -1],$temp,1,$char);
                         $aparencia[$i] =~ s/\so\s/$char$char$char/;
@@ -283,7 +283,7 @@ sub converteLvl2{
         $aparencia[$i] =~ s/\_/=/g;
         my ($trailing) = $aparencia[$i] =~ /^\s*/g;
         $aparencia[$i] =~ s/^\s*/\%/g;
-        my $char = chr(176);
+        my $char = '$';
         $aparencia[$i] =~ s/\s/$char/g;
         $aparencia[$i] =~ s/\%/$trailing/g;
     }

@@ -5,12 +5,14 @@
 #include <ctime>
 #include <unistd.h>
 #include <iostream>
+#include <cstdlib>
+#include <ctime>
 #include "perlWrapper.h"
 
 using namespace std;
 
-const unsigned maxX = 140;
-const unsigned maxY = 30;
+const unsigned maxX = maxXTela;
+const unsigned maxY = maxYTela;
 
 bool checaForaDaTela(Entidade *entidade, unsigned maxX, unsigned maxY){
     if (entidade->sprite.x > maxX){
@@ -38,6 +40,8 @@ Engine::Engine() {
 
 void Engine::novoJogo(float dificuldade = 1, unsigned pontos = 0) {
 
+    srand((int)time(0));
+
     Jogo jogo(dificuldade);
     Tela tela(maxX, maxY, true);
 
@@ -49,9 +53,13 @@ void Engine::novoJogo(float dificuldade = 1, unsigned pontos = 0) {
     time_t now = time(0);
 
     float f = 0;
+    int limF = (rand() % 20) + 21;
     float t = 0;
+    float l = 0;
 
     float performace = 1;
+
+    bool redimensionar = true;
 
     jogo.criaPlayer(*this);
 
@@ -61,16 +69,34 @@ void Engine::novoJogo(float dificuldade = 1, unsigned pontos = 0) {
         desenhador.desenha(batch, tela);
         ciclos++;
         f += escalaDeTempo;
+        l += escalaDeTempo;
         pontos += (int)(escalaDeTempo*(1/frequencia)/performace*dificuldade*pontosPorSegundo);
-        cout << "Pontuacao: " << pontos << '\n';
-        cout << "Dificuldade: " << dificuldade << '\n';
-        cout <<"FPS = " << fps << '\n';
-        cout <<"Entidades = " << entidades.size() << '\n';
-        cout <<"Escala de tempo = " << escalaDeTempo << '\n';
-        cout << f << endl;
-        cout << "Pos Player: (" << entidades.at(0)->sprite.x << "," << entidades.at(0)->sprite.y << ")" << " Tamanho(H,L): (" << entidades.at(0)->sprite.H()<< "," << entidades.at(0)->sprite.L() << ")\n";
-        cout << "Pos OBS: (" << entidades.at(entidades.size() - 1)->sprite.x << "," << entidades.at(entidades.size() - 1)->sprite.y << ")" << " Tamanho(H,L): (" << entidades.at(entidades.size() - 1)->sprite.H()<< "," << entidades.at(entidades.size() - 1)->sprite.L() << ")\n";
-        cout << "Numero de colisoes: " << colisoes.size()/2 << "\n";
+
+
+
+        if(emDebug) {
+            cout << "Pontuacao: " << pontos << '\n';
+            cout << "Dificuldade: " << dificuldade << '\n';
+            cout << "FPS = " << fps << '\n';
+            cout << "Entidades = " << entidades.size() << '\n';
+            cout << "Escala de tempo = " << escalaDeTempo << '\n';
+            cout << "Tempo obstaculos: " << f << "/" << limF << ", Tempo lvl: " << l << endl;
+            cout << "Pos Player: (" << entidades.at(0)->sprite.x << "," << entidades.at(0)->sprite.y << ")"
+                 << " Tamanho(H,L): (" << entidades.at(0)->sprite.H() << "," << entidades.at(0)->sprite.L() << ")\n";
+            cout << "Pos OBS: (" << entidades.at(entidades.size() - 1)->sprite.x << ","
+                 << entidades.at(entidades.size() - 1)->sprite.y << ")" << " Tamanho(H,L): ("
+                 << entidades.at(entidades.size() - 1)->sprite.H() << ","
+                 << entidades.at(entidades.size() - 1)->sprite.L() << ")\n";
+            cout << "Numero de colisoes: " << colisoes.size() / 2 << "\n";
+        }
+        if(redimensionar && noob){
+            cout << "Redimensione o terminal ate que a moldura seja visivel sem distorcao. Apos isso, pressione uma tecla. Para desabilitar esta mensagem edite o arquivo VariaveisConfig.h" << "\n";
+            string temp;
+            cin >> temp;
+            redimensionar = false;
+        }
+
+
         usleep(periodo);
         if (time(0) - now >= 1){
             now = time(0);
@@ -78,17 +104,26 @@ void Engine::novoJogo(float dificuldade = 1, unsigned pontos = 0) {
             ciclos = 0;
             performace = fps/frequencia;
         }
-        if (f >= 30){
+        if (f >= limF){
             jogo.criaObstaculo(*this, maxX, maxY, 2);
             f = 0;
+            limF = (rand() % 20) + 21;
 
             update(performace);
             desenhador.desenha(batch, tela);
         }
+        if (l >= 70 && dificuldade == 1){
+            dificuldade++;
+            lvlup(2);
+        }
+        if(l >= 100 && dificuldade == 2){
+            dificuldade++;
+            lvlup(3);
+        }
     }
 
     system("clear");
-    cout << "Você perdeu, seu bosta!" << endl;
+    cout << "Você perdeu!" << endl;
     cin >> f;
 }
 
@@ -120,8 +155,6 @@ void Engine::attFisica(Entidade *entidade, float performace) {
 }
 
 void Engine::attGrafica(Entidade *entidade) {
-    // Por enquanto reescrevendo todos os sprites a cada frame
-    // posteriormente possivelmente fazer isso apenas em caso de alteração
     batch.addSprite(entidade->sprite);
 }
 
@@ -143,7 +176,7 @@ void Engine::update(float performace) {
                     pair<Entidade *, Entidade *> p(a,b);
                     a->emColisao();
                     if(contemComponente(Componente::PLAYER, a->getComponentes())){
-                        this->status = Status::sair;
+                        //this->status = Status::sair;
                     }
                     colisoes.push_back(p);
                 }
@@ -177,12 +210,14 @@ int Engine::inicializaSprites() {
     string aparenciaO;
     cin >> aparenciaO;
 
-    if(aparenciaP == "1"){
-        aparenciaP = "playerTeste.txt";
-    }
+    if(emDebug) {
+        if (aparenciaP == "1") {
+            aparenciaP = "playerTeste.txt";
+        }
 
-    if(aparenciaO == "1"){
-        aparenciaO = "obstaculoTeste.txt";
+        if (aparenciaO == "1") {
+            aparenciaO = "obstaculoTeste.txt";
+        }
     }
 
     vector<vector<string>> aparencias = pw.configuraAparencia(aparenciaP,aparenciaO);
@@ -214,4 +249,16 @@ bool Engine::colidem(Entidade *a, Entidade *b) {
         }
     }
     return false;
+}
+
+void Engine::lvlup(int lvl) {
+    escalaDeTempo += 0.3;
+    for(Entidade *entidade : entidades){
+        if(contemComponente(Componente::PLAYER, entidade->getComponentes())){
+            entidade->sprite.setSprite(matrizPlayer[lvl - 1]);
+        }
+        else if(contemComponente(Componente::OBSTACULO, entidade->getComponentes())){
+            entidade->sprite.setSprite(matrizObstaculo[lvl - 1]);
+        }
+    }
 }

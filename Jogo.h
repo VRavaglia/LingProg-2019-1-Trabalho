@@ -1,5 +1,6 @@
 #include "Engine.h"
 #include "Entidade.h"
+#include "VariaveisConfig.h"
 #include <map>
 
 #ifndef TRABALHO_JOGO_H

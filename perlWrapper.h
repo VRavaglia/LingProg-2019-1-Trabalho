@@ -7,6 +7,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include "VariaveisConfig.h"
 
 using namespace std;
 

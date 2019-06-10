@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
-
+#include "VariaveisConfig.h"
 
 /// Classe que armazena uma matriz de char para ser lido como um sprite
 class Sprite{

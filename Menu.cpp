@@ -117,6 +117,9 @@ Menu::Menu(Engine &engine) {
 
 void Menu::exibe() {
     system("clear");
+    if(emDebug){
+        cout << "MODO DE DEBUG HABILITADO EM VariaveisConfig.h\n";
+    }
     cout << "|===================================|\n";
     cout << "|       Trabalho 3 - Dinojogo       |\n";
     cout << "|===================================|\n";
@@ -128,5 +131,5 @@ void Menu::exibe() {
     cout << "| 5 ------------- Lista jogos salvos|\n";
     cout << "|===================================|\n";
     cout << msgAdicional << endl;
-    cout << "Ensira a opcao desejada:" << endl;
+    cout << "Insira a opcao desejada:" << endl;
 }

@@ -4,7 +4,9 @@
 #include <typeinfo>
 #include <string>
 #include <math.h>
+#include "VariaveisConfig.h"
 using namespace std;
+
 
 template <typename T>
 class vec2{

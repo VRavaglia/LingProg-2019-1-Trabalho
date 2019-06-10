@@ -3,6 +3,7 @@
 
 #include "Desenhador.h"
 #include "Entidade.h"
+#include "VariaveisConfig.h"
 #include <vector>
 
 enum Status{rodando, sair, pausado};
@@ -71,8 +72,8 @@ private:
     /// Lista de colisoes
     vector <pair<Entidade *, Entidade*>> colisoes;
 
-
-
+    /// Troca de aparencias ao passar de nivel
+    void lvlup(int lvl);
 
 };
 
