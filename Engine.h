@@ -75,6 +75,14 @@ private:
     /// Troca de aparencias ao passar de nivel
     void lvlup(int lvl);
 
+    /// Salva a pontuacao final em caso de derrota
+    int appendSave(string nomeArquivo, string perfil,  unsigned pontuacao);
+
+    /// Checa se o perfil ja existe no arquivo de pontuacoes
+    bool checaPerfil(string arquivo, string perfil);
+
+    unsigned pontos;
+
 };
 
 

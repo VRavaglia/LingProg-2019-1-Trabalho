@@ -7,6 +7,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
+#include <fstream>
 #include "perlWrapper.h"
 
 using namespace std;
@@ -38,9 +39,11 @@ Engine::Engine() {
 
 }
 
-void Engine::novoJogo(float dificuldade = 1, unsigned pontos = 0) {
+void Engine::novoJogo(float dificuldade = 1, unsigned pontos_ = 0) {
 
     srand((int)time(0));
+
+    pontos = pontos_;
 
     Jogo jogo(dificuldade);
     Tela tela(maxX, maxY, true);
@@ -124,7 +127,16 @@ void Engine::novoJogo(float dificuldade = 1, unsigned pontos = 0) {
 
     system("clear");
     cout << "Você perdeu!" << endl;
-    cin >> f;
+    cout << "Insira o nome do arquivo em que sera salvo seu progresso:" << endl;
+    string nomeArquivo;
+    cin >> nomeArquivo;
+    cout << "Insira o nome do perfil: " << endl;
+    string perfil;
+    cin >> perfil;
+    while(checaPerfil(nomeArquivo, perfil)) {
+        cin >> perfil;
+    }
+    appendSave(nomeArquivo, perfil, pontos);
 }
 
 void Engine::addEntidade(Entidade *entidade) {
@@ -176,7 +188,7 @@ void Engine::update(float performace) {
                     pair<Entidade *, Entidade *> p(a,b);
                     a->emColisao();
                     if(contemComponente(Componente::PLAYER, a->getComponentes())){
-                        //this->status = Status::sair;
+                        this->status = Status::sair;
                     }
                     colisoes.push_back(p);
                 }
@@ -261,4 +273,17 @@ void Engine::lvlup(int lvl) {
             entidade->sprite.setSprite(matrizObstaculo[lvl - 1]);
         }
     }
+}
+
+int Engine::appendSave(string nomeArquivo, string perfil,  unsigned pontuacao){
+    ofstream outfile;
+    outfile.open(nomeArquivo, std::ios_base::app);
+    outfile << (perfil + "|" + to_string(pontuacao));
+    outfile.close();
+    return 0;
+}
+
+
+bool Engine::checaPerfil(string arquivo, string perfil) {
+    return false;
 }
