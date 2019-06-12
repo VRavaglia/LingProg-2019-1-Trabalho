@@ -39,7 +39,7 @@ Engine::Engine() {
 
 }
 
-void Engine::novoJogo(float dificuldade = 1, unsigned pontos_ = 0) {
+void Engine::novoJogo(string nomeArquivo, float dificuldade = 1, unsigned pontos_ = 0) {
 
     srand((int)time(0));
 
@@ -127,9 +127,6 @@ void Engine::novoJogo(float dificuldade = 1, unsigned pontos_ = 0) {
 
     system("clear");
     cout << "Você perdeu!" << endl;
-    cout << "Insira o nome do arquivo em que sera salvo seu progresso:" << endl;
-    string nomeArquivo;
-    cin >> nomeArquivo;
     cout << "Insira o nome do perfil: " << endl;
     string perfil;
     cin >> perfil;
@@ -246,8 +243,8 @@ int Engine::inicializaSprites() {
     return 0;
 }
 
-void Engine::carregaJogo(float dificuldadeP, unsigned pontuacao) {
-    novoJogo(dificuldadeP, pontuacao);
+void Engine::carregaJogo(string nomeArquivo, float dificuldadeP, unsigned pontuacao) {
+    novoJogo(nomeArquivo, dificuldadeP, pontuacao);
 }
 
 bool Engine::colidem(Entidade *a, Entidade *b) {

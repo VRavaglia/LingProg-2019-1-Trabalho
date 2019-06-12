@@ -23,8 +23,8 @@ public:
     void removeEntidade(Entidade *entidade);
 
     /// Jogo em si
-    void novoJogo(float dificuldade, unsigned pontos);
-    void carregaJogo(float dificuldadeP, unsigned pontuacao);
+    void novoJogo(string nomeArquivo, float dificuldade, unsigned pontos);
+    void carregaJogo(string nomeArquivo, float dificuldadeP, unsigned pontuacao);
 
     /// Parametros de inicialização do jogador
     int pXInicio = 0;
@@ -82,6 +82,8 @@ private:
     bool checaPerfil(string arquivo, string perfil);
 
     unsigned pontos;
+
+    string nomeArquivoDados;
 
 };
 

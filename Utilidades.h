@@ -4,6 +4,7 @@
 #include <typeinfo>
 #include <string>
 #include <math.h>
+#include <fstream>
 #include "VariaveisConfig.h"
 using namespace std;
 
@@ -32,5 +33,10 @@ bool isNumber(T num){
     if(tipo == typeid(double).name())
         return true;
 };
+
+bool arquivoExiste(string nomeArquivo){
+    ifstream f(nomeArquivo.c_str());
+    return f.good();
+}
 
 #endif //TRABALHO_UTILIDADES_H
