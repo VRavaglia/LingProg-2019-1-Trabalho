@@ -1,3 +1,4 @@
+#include "Utilidades.h"
 #include "Engine.h"
 #include "Entidade.h"
 #include "VariaveisConfig.h"

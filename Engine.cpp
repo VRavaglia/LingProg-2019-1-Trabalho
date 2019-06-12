@@ -1,5 +1,4 @@
 #include "Engine.h"
-#include "Utilidades.h"
 #include "Jogo.h"
 #include <vector>
 #include <ctime>
@@ -14,6 +13,13 @@ using namespace std;
 
 const unsigned maxX = maxXTela;
 const unsigned maxY = maxYTela;
+
+void pressioneEnter() {
+    std::cout << "Aperte {ENTER} para continuar..." << flush;
+    char c;
+    cin >> c;
+
+}
 
 bool checaForaDaTela(Entidade *entidade, unsigned maxX, unsigned maxY){
     if (entidade->sprite.x > maxX){
@@ -93,9 +99,9 @@ void Engine::novoJogo(string nomeArquivo, float dificuldade = 1, unsigned pontos
             cout << "Numero de colisoes: " << colisoes.size() / 2 << "\n";
         }
         if(redimensionar && noob){
-            cout << "Redimensione o terminal ate que a moldura seja visivel sem distorcao. Apos isso, pressione uma tecla. Para desabilitar esta mensagem edite o arquivo VariaveisConfig.h" << "\n";
-            string temp;
-            cin >> temp;
+            cout << "Redimensione o terminal ate que a moldura seja visivel sem distorcao." << endl;
+            cout << "Para desabilitar esta mensagem edite o arquivo VariaveisConfig.h" << endl;
+            pressioneEnter();
             redimensionar = false;
         }
 
@@ -127,13 +133,12 @@ void Engine::novoJogo(string nomeArquivo, float dificuldade = 1, unsigned pontos
 
     system("clear");
     cout << "Você perdeu!" << endl;
-    cout << "Insira o nome do perfil: " << endl;
+    cout << "Insira o nome do perfil que sera salvo: " << endl;
     string perfil;
     cin >> perfil;
-    while(checaPerfil(nomeArquivo, perfil)) {
-        cin >> perfil;
-    }
     appendSave(nomeArquivo, perfil, pontos);
+    cout << "O seguinte perfil foi adicionado: " << "|Nome: " << perfil << "|Pontuacao: " << pontos << "|" << endl;
+    pressioneEnter();
 }
 
 void Engine::addEntidade(Entidade *entidade) {
@@ -275,12 +280,8 @@ void Engine::lvlup(int lvl) {
 int Engine::appendSave(string nomeArquivo, string perfil,  unsigned pontuacao){
     ofstream outfile;
     outfile.open(nomeArquivo, std::ios_base::app);
-    outfile << (perfil + "|" + to_string(pontuacao));
+    outfile << (perfil + "|" + to_string(pontuacao) + "\n");
     outfile.close();
     return 0;
 }
 
-
-bool Engine::checaPerfil(string arquivo, string perfil) {
-    return false;
-}

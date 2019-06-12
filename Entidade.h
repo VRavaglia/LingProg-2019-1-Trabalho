@@ -1,8 +1,8 @@
 #ifndef TRABALHO_ENTIDADE_H
 #define TRABALHO_ENTIDADE_H
 
-#include "Desenhador.h"
 #include "Utilidades.h"
+#include "Desenhador.h"
 #include "VariaveisConfig.h"
 
 /// Lista de características especiais que classificam a entidade

@@ -94,14 +94,17 @@ int perlWrapper::leJogo(string nome, float dificuldade, string nomeArquivo, unsi
     int count = call_pv("leJogoEmAndamento", G_ARRAY);
     SPAGAIN;
 
-    int status = POPi;
+    string status = POPp;
     pontuacao = POPi;
 
     PUTBACK;
     FREETMPS;
     LEAVE;
 
-    return status;
+    if(status != "ok"){
+        return -1;
+    }
+    return 0;
 }
 
 //(@pontuacao, $status) = GerenciamentoDeDados::listaPontuacoesDeJogador($nome, $restricao, $arquivo);

@@ -2,14 +2,13 @@
 #include <limits>
 #include "Menu.h"
 #include "perlWrapper.h"
-#include "Utilidades.h"
 
-void pressioneEnter()
-{
-    std::cout << "Aperte {ENTER} para continuar..." << flush;
-    char c;
-    cin >> c;
+bool arquivoExiste(string nomeArquivo) {
+    ifstream f(nomeArquivo.c_str());
+    return f.good();
+
 }
+
 
 Menu::Menu(Engine &engine) {
     char opcao;
@@ -69,13 +68,15 @@ Menu::Menu(Engine &engine) {
                 float dificuldadeP;
                 cin >> dificuldadeP;
                 unsigned pontuacao;
-                pw.leJogo(nome, dificuldadeP, nomeArquivo, pontuacao);
-
-                if(engine.inicializaSprites()){
-                    msgAdicional = "Erro na leitura das aparencias.";
-                }
-                else{
-                    engine.carregaJogo(nomeArquivo, dificuldadeP, pontuacao);
+                if(pw.leJogo(nome, dificuldadeP, nomeArquivo, pontuacao)){
+                    msgAdicional = "Erro na leitura do perfil: " + to_string(pw.leJogo(nome, dificuldadeP, nomeArquivo, pontuacao));
+                } else{
+                    if(engine.inicializaSprites()){
+                        msgAdicional = "Erro na leitura das aparencias.";
+                    }
+                    else{
+                        engine.carregaJogo(nomeArquivo, dificuldadeP, pontuacao);
+                    }
                 }
 
 
@@ -158,3 +159,5 @@ void Menu::exibe() {
     cout << msgAdicional << endl;
     cout << "Insira a opcao desejada:" << endl;
 }
+
+

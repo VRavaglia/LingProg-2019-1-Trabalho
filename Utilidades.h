@@ -34,9 +34,6 @@ bool isNumber(T num){
         return true;
 };
 
-bool arquivoExiste(string nomeArquivo){
-    ifstream f(nomeArquivo.c_str());
-    return f.good();
-}
+
 
 #endif //TRABALHO_UTILIDADES_H

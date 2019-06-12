@@ -1,10 +1,14 @@
 #ifndef TRABALHO_ENGINE_H
 #define TRABALHO_ENGINE_H
 
+#include "Utilidades.h"
 #include "Desenhador.h"
 #include "Entidade.h"
 #include "VariaveisConfig.h"
 #include <vector>
+
+void pressioneEnter();
+
 
 enum Status{rodando, sair, pausado};
 
@@ -78,8 +82,6 @@ private:
     /// Salva a pontuacao final em caso de derrota
     int appendSave(string nomeArquivo, string perfil,  unsigned pontuacao);
 
-    /// Checa se o perfil ja existe no arquivo de pontuacoes
-    bool checaPerfil(string arquivo, string perfil);
 
     unsigned pontos;
 

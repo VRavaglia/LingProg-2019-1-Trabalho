@@ -1,5 +1,4 @@
 #include "Entidade.h"
-#include "Utilidades.h"
 
 bool contemComponente(Componente componente, unsigned componentes){
 
