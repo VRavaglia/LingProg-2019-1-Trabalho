@@ -35,7 +35,8 @@ Menu::Menu(Engine &engine) {
 
     while(!sair){
         exibe();
-
+        cout << flush;
+        fflush(stdout);
         cin >> opcao;
         string nome;
         int status;
