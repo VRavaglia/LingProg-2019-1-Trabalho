@@ -132,7 +132,7 @@ Tela::Tela(unsigned maxX_, unsigned maxY_, bool frame_){
         vector <char> coluna;
         coluna.reserve(maxY);
         tela.push_back(coluna);
-        for (size_t y = 0; y < Tela::H(); ++y) {
+        for (size_t y = 0; y < H; ++y) {
             tela[x].push_back(' ');
         }
 

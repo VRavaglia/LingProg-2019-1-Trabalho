@@ -14,6 +14,7 @@ bool contemComponente(Componente componente, unsigned componentes);
 class Entidade {
 public:
     Entidade();
+    virtual ~Entidade() = default;
     /// Entidade do jogo que tem aparencia e velocidade
     /// Aparencia
     Sprite sprite;

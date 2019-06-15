@@ -91,7 +91,7 @@ int perlWrapper::leJogo(string nome, float dificuldade, string nomeArquivo, unsi
     XPUSHs(sv_2mortal(newSViv(dificuldade)));
     XPUSHs(sv_2mortal(newSVpv(nomeArquivo.c_str(),nomeArquivo.length())));
     PUTBACK;
-    int count = call_pv("leJogoEmAndamento", G_ARRAY);
+    call_pv("leJogoEmAndamento", G_ARRAY);
     SPAGAIN;
 
     string status = POPp;
@@ -170,4 +170,46 @@ vector <vector<string>> perlWrapper::configuraAparencia(string nomeArquivoPlayer
 
     std::reverse(sprites.begin(), sprites.end());
     return sprites;
+}
+
+//@todas = GerenciamentoDeDados::vetorPalavras($nomeArquivo);
+vector<tuple<string, unsigned, float>> perlWrapper::vetorPalavras(string nomeArquivo) {
+    dSP;
+    ENTER;
+    SAVETMPS;
+    PUSHMARK(SP);
+
+    XPUSHs(sv_2mortal(newSVpv(nomeArquivo.c_str(),nomeArquivo.length())));
+
+    PUTBACK;
+    int count = call_pv("vetorPalavras", G_ARRAY);
+    SPAGAIN;
+
+    vector<tuple<string, unsigned, float>> pontuacoes;
+    pontuacoes.reserve(count/3);
+    string nome;
+    unsigned pontos;
+    float dificuldade;
+
+    for (int i = 1; i < count + 1; ++i) {
+        switch (i % 3){
+            case 2:
+                pontos = POPu;
+                break;
+            case 1:
+                dificuldade = POPn;
+                break;
+            case 0:
+                nome = POPp;
+                tuple <string, unsigned, float> tupla = {nome, pontos, dificuldade};
+                pontuacoes.emplace_back(tupla);
+                break;
+        }
+    }
+
+    PUTBACK;
+    FREETMPS;
+    LEAVE;
+
+    return pontuacoes;
 }

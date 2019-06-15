@@ -63,7 +63,6 @@ void Engine::novoJogo(string nomeArquivo, float dificuldade = 1, unsigned pontos
 
     float f = 0;
     int limF = (rand() % 20) + 21;
-    float t = 0;
     float l = 0;
 
     float performace = 1;
@@ -148,7 +147,7 @@ void Engine::addEntidade(Entidade *entidade) {
 void Engine::removeEntidade(Entidade *entidade) {
     int i = -1;
     // Necessita de otimização
-    for (int j = 0; j < entidades.size(); ++j) {
+    for (size_t j = 0; j < entidades.size(); ++j) {
         if (entidades[j] == entidade){
             i = j;
         }

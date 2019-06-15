@@ -9,7 +9,6 @@ bool arquivoExiste(string nomeArquivo) {
 
 }
 
-
 Menu::Menu(Engine &engine) {
     char opcao;
     bool sair = false;
@@ -29,7 +28,6 @@ Menu::Menu(Engine &engine) {
         cin >> nomeArquivo;
         if(!arquivoExiste(nomeArquivo)){
             std::ofstream arquivo (nomeArquivo);
-            arquivo.close();
         }
     }
 
@@ -43,6 +41,8 @@ Menu::Menu(Engine &engine) {
         int status;
         vector<pair<string, unsigned>> pontuacoes;
         vector<unsigned>  listaPontos;
+        unsigned dificuldade;
+        vector<tuple<string, unsigned, float>> perfis;
 
         switch (opcao){
             case '0':
@@ -50,7 +50,7 @@ Menu::Menu(Engine &engine) {
                 break;
             case '1':
                 cout << "Insira a dificuldade inicial: " << endl;
-                unsigned dificuldade;
+
                 cin >> dificuldade;
 
                 if(engine.inicializaSprites()){
@@ -62,6 +62,13 @@ Menu::Menu(Engine &engine) {
 
                 break;
             case '2':
+                cout << "Pontuacoes contidas no arquivo " << nomeArquivo << endl;
+                perfis = pw.vetorPalavras(nomeArquivo);
+                for(auto perfil : perfis){
+                    if(get<2>(perfil) != -1){
+                        cout << "Nome: |" << get<0>(perfil) << "| Pontuacao: |" << get<1>(perfil) << "| Dificuldade: |" << get<2>(perfil) << "|\n";
+                    }
+                }
                 cout << "Insira o nome do perfil: " << endl;
                 cin >> nome;
                 cout << "Insira a dificuldade do perfil: " << endl;
@@ -121,6 +128,14 @@ Menu::Menu(Engine &engine) {
                 break;
 
             case '5':
+                perfis = pw.vetorPalavras(nomeArquivo);
+                for(auto perfil : perfis){
+                    if(get<2>(perfil) != -1){
+                        cout << "Nome: |" << get<0>(perfil) << "| Pontuacao: |" << get<1>(perfil) << "| Dificuldade: |" << get<2>(perfil) << "|\n";
+                    }
+                }
+                pressioneEnter();
+
                 break;
 
             case '6':
@@ -129,7 +144,6 @@ Menu::Menu(Engine &engine) {
                 cin >> nomeArquivo;
                 if(!arquivoExiste(nomeArquivo)){
                     std::ofstream arquivo (nomeArquivo);
-                    arquivo.close();
                 }
                 break;
 

@@ -7,6 +7,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <tuple>
 #include "VariaveisConfig.h"
 
 using namespace std;
@@ -23,6 +24,7 @@ public:
     int leJogo(string nome, float dificuldade, string nomeArquivo, unsigned &pontuacao);
     int listaPontuacoesJogador(string nome, int restricao, string nomeArquivo, vector<unsigned> &listaPontos);
     vector <vector<string>> configuraAparencia(string nomeArquivoPlayer, string nomeArquivoObstculo);
+    vector <tuple<string, unsigned, float>> vetorPalavras(string nomeArquivo);
 
     // Versao no perl:
     //my @pontuacoes = GerenciamentoDeDados::listaPontuacoesMaiores($arquivo, $n);
@@ -30,6 +32,7 @@ public:
     //($pontuacao, $status) = GerenciamentoDeDados::leJogoEmAndamento($nome, $dificuldade, $arquivo);
     //(@pontuacao, $status) = GerenciamentoDeDados::listaPontuacoesDeJogador($nome, $restricao, $arquivo);
     //@aparencias = GerenciamentoDeDados::configuraAparencia($arquivoPlayer, $arquivoObstaculo);
+    //@todas = GerenciamentoDeDados::vetorPalavras($nomeArquivo);
 
 private:
     PerlInterpreter *my_perl;

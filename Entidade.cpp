@@ -33,6 +33,9 @@ unsigned Entidade::getComponentes() {
     return componentes;
 }
 
+
+
 void Player::emColisao() {
 
 }
+

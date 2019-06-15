@@ -36,6 +36,29 @@ sub matrizPalavras {
     return @todas;
 }
 
+sub vetorPalavras {
+    open(my $arquivo, "<", shift)
+        or die("\n" . $mensagensErro{"arquivo_01"} . "\n" . $!);
+    my @todas;
+    my $i = 0;
+    while (my $linha = <$arquivo>) {
+        chomp $linha;
+        if (substr($linha, 0, 1) ne "#" && $linha =~ m/(\|\d+\|\d+)$|(\|\d+)$/) {
+            my @palavras = split /\|/, $linha;
+            for my $k (0 .. scalar @palavras - 1) {
+                $todas[$i] = $palavras[$k];
+                $i++;
+            }
+            if(scalar @palavras == 2){
+                $todas[$i] = -1;
+                $i++;
+            }
+
+        }
+    }
+    return @todas;
+}
+
 sub listaPontuacoesMaiores {
     my @linhas = matrizPalavras(shift);
     if (scalar @linhas == 0) {
