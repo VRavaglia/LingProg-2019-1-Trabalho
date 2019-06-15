@@ -8,16 +8,23 @@
 #include <ctime>
 #include <fstream>
 #include "perlWrapper.h"
+#include "InputManager.h"
+
+
 
 using namespace std;
 
 const unsigned maxX = maxXTela;
 const unsigned maxY = maxYTela;
 
+int tecla;
+
+
 void pressioneEnter() {
     std::cout << "Aperte {ENTER} para continuar..." << flush;
-    char c;
-    cin >> c;
+    InputManager::getkeyPause();
+    while(InputManager::getkeyPause() != 10){ // 10 = ENTER
+    }
 
 }
 
@@ -41,12 +48,11 @@ bool checaForaDaTela(Entidade *entidade, unsigned maxX, unsigned maxY){
 Engine::Engine() {
     frequencia = 10;
     escalaDeTempo = 1.0;
-    gravidade = 5.0;
+    gravidade = 20.0;
 
 }
 
 void Engine::novoJogo(string nomeArquivo, float dificuldade = 1, unsigned pontos_ = 0) {
-
     srand((int)time(0));
 
     pontos = pontos_;
@@ -70,6 +76,8 @@ void Engine::novoJogo(string nomeArquivo, float dificuldade = 1, unsigned pontos
     bool redimensionar = true;
 
     jogo.criaPlayer(*this);
+
+    int teclaPrint = -2;
 
     // Loop do jogo
     while(status != Status::sair){
@@ -96,6 +104,14 @@ void Engine::novoJogo(string nomeArquivo, float dificuldade = 1, unsigned pontos
                  << entidades.at(entidades.size() - 1)->sprite.H() << ","
                  << entidades.at(entidades.size() - 1)->sprite.L() << ")\n";
             cout << "Numero de colisoes: " << colisoes.size() / 2 << "\n";
+            fflush(stdout);
+            cout << flush;
+            tecla = InputManager::_kbhit();
+            if (tecla){
+                teclaPrint += tecla;
+                InputManager::getKey();
+            }
+            cout << "Tecla pressionada: " << teclaPrint << "\n";
         }
         if(redimensionar && noob){
             cout << "Redimensione o terminal ate que a moldura seja visivel sem distorcao." << endl;
@@ -160,11 +176,21 @@ void Engine::removeEntidade(Entidade *entidade) {
 }
 
 void Engine::attFisica(Entidade *entidade, float performace) {
+    if(contemComponente(Componente::PLAYER, entidade->getComponentes())){
+        if(entidade->sprite.y >= maxY && InputManager::_kbhit()){
+            entidade->velocidade.y -= 20;
+        }
+    }
     entidade->sprite.x += entidade->velocidade.x * escalaDeTempo*(1/frequencia)/performace;
     entidade->sprite.y += entidade->velocidade.y * escalaDeTempo*(1/frequencia)/performace;
-    if(contemComponente(Componente::GRAVIDADE, entidade->getComponentes()) && entidade->sprite.y < (maxY)){
-        entidade->sprite.y += gravidade * escalaDeTempo*(1/frequencia)/performace;
+    if(contemComponente(Componente::GRAVIDADE, entidade->getComponentes())){
+        entidade->velocidade.y += gravidade * escalaDeTempo*(1/frequencia)/performace;
+        if(entidade->sprite.y >= maxY){
+            entidade->velocidade.y = 0;
+            entidade->sprite.y = maxY;
+        }
     }
+
 }
 
 void Engine::attGrafica(Entidade *entidade) {

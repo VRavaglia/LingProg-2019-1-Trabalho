@@ -32,7 +32,7 @@ public:
 
     /// Parametros de inicialização do jogador
     int pXInicio = 0;
-    int pYInicio = 5;
+    int pYInicio = 30;
     int pZInicio = 1;
 
     // Inicia os sprites de player e obstaculos
