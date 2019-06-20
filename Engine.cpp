@@ -55,7 +55,14 @@ Engine::Engine() {
 void Engine::novoJogo(string nomeArquivo, float dificuldade = 1, unsigned pontos_ = 0) {
     srand((int)time(0));
 
+    cout << "Insira o nome do perfil que sera salvo: " << endl;
+    string perfil;
+    cin >> perfil;
+
     pontos = pontos_;
+
+    perlWrapper pw;
+    pw.interpretador();
 
     Jogo jogo(dificuldade);
     Tela tela(maxX, maxY, true);
@@ -138,19 +145,18 @@ void Engine::novoJogo(string nomeArquivo, float dificuldade = 1, unsigned pontos
         }
         if (l >= 70 && dificuldade == 1){
             dificuldade++;
+            pw.salvaPerfil(nomeArquivoDados, perfil, pontos, dificuldade);
             lvlup(2);
         }
-        if(l >= 100 && dificuldade == 2){
+        if(l >= 140 && dificuldade == 2){
             dificuldade++;
+            pw.salvaPerfil(nomeArquivoDados, perfil, pontos, dificuldade);
             lvlup(3);
         }
     }
 
     system("clear");
     cout << "Você perdeu!" << endl;
-    cout << "Insira o nome do perfil que sera salvo: " << endl;
-    string perfil;
-    cin >> perfil;
     appendSave(nomeArquivo, perfil, pontos);
     cout << "O seguinte perfil foi adicionado: " << "|Nome: " << perfil << "|Pontuacao: " << pontos << "|" << endl;
     pressioneEnter();
