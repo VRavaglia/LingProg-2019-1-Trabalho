@@ -12,3 +12,7 @@ _Deparsed_XSubs\.pm
 main\.exe
 
 main
+
+valgrind-out\.txt
+
+valgrind-out02\.txt

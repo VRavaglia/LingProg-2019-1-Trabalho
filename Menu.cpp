@@ -10,7 +10,7 @@ bool arquivoExiste(string nomeArquivo) {
 }
 
 Menu::Menu(Engine &engine) {
-    char opcao;
+    string opcao;
     bool sair = false;
     msgAdicional = "";
 
@@ -35,9 +35,7 @@ Menu::Menu(Engine &engine) {
 
     while(!sair){
         exibe();
-        cout << flush;
-        fflush(stdout);
-        cin >> opcao;
+        getline(cin, opcao, '\n');
         string nome;
         int status;
         vector<pair<string, unsigned>> pontuacoes;
@@ -45,7 +43,7 @@ Menu::Menu(Engine &engine) {
         unsigned dificuldade;
         vector<tuple<string, unsigned, float>> perfis;
 
-        switch (opcao){
+        switch (opcao[0]){
             case '0':
                 sair = true;
                 break;
