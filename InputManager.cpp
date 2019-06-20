@@ -2,7 +2,32 @@
 #include <termios.h>
 #include <unistd.h>
 #include <cassert>
+#include <iostream>
+#include <string>
+#include <sstream>
+#include <limits>
 
+
+
+int InputManager::getNumber() {
+    using namespace std;
+    int retorno;
+    std::string temp;
+    getline (cin,temp);
+    stringstream(temp) >> retorno;
+    return retorno;
+}
+
+
+bool InputManager::arquivoExiste(std::string nomeArquivo) {
+    using namespace std;
+    ifstream f(nomeArquivo.c_str());
+    return f.good();
+}
+
+
+// As funcoes a seguir sao uma coletanea de funcoes encontradas em foruns e blogs
+// Como nao sao de nossao autoria, decidi nao remover os comentarios
 int InputManager::getkeyPause() {
     int c=0;
 
@@ -64,3 +89,5 @@ int InputManager::_kbhit() {
     ioctl(STDIN, FIONREAD, &bytesWaiting);
     return bytesWaiting;
 }
+
+

@@ -12,5 +12,5 @@
 int main(){
     Engine engine;
     Menu menu(engine);
-    menu.exibe();
+    return 0;
 }

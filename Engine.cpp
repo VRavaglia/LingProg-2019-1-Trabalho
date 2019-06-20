@@ -20,9 +20,11 @@ const unsigned maxY = maxYTela;
 int tecla;
 
 
+
+
 void pressioneEnter() {
     std::cout << "Aperte {ENTER} para continuar..." << flush;
-    InputManager::getkeyPause();
+    //InputManager::getkeyPause();
     while(InputManager::getkeyPause() != 10){ // 10 = ENTER
     }
 
@@ -57,7 +59,7 @@ void Engine::novoJogo(string nomeArquivo, float dificuldade = 1, unsigned pontos
 
     cout << "Insira o nome do perfil que sera salvo: " << endl;
     string perfil;
-    cin >> perfil;
+    getline(cin, perfil);
 
     pontos = pontos_;
 
@@ -249,11 +251,17 @@ int Engine::inicializaSprites() {
 
     cout << "Insira o nome do arquivo com a aparencia do Jogador: " << endl;
     string aparenciaP;
-    cin >> aparenciaP;
+    getline(cin, aparenciaP);
+    if(!InputManager::arquivoExiste(aparenciaP)){
+        return 1;
+    }
 
     cout << "Insira o nome do arquivo com a aparencia dos Obstaculos: " << endl;
     string aparenciaO;
-    cin >> aparenciaO;
+    getline(cin, aparenciaO);
+    if(!InputManager::arquivoExiste(aparenciaO)){
+        return 1;
+    }
 
     if(emDebug) {
         if (aparenciaP == "1") {
@@ -266,6 +274,14 @@ int Engine::inicializaSprites() {
     }
 
     vector<vector<string>> aparencias = pw.configuraAparencia(aparenciaP,aparenciaO);
+    if(aparencias.size() != 3){
+        return 2;
+    }
+    for(auto aparencia: aparencias){
+        if(aparencias.empty()){
+            return 3;
+        }
+    }
 
 
     for (int i = 0; i < 6; ++i) {

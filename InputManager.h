@@ -15,6 +15,12 @@
 #include <stropts.h>
 #include <sys/ioctl.h>
 
+#include <string>
+#include <iostream>
+#include <fstream>
+
+
+
 
 
 class InputManager {
@@ -23,6 +29,8 @@ public:
     static int getkeyPause();
     static int getKey();
     static int _kbhit();
+    static int getNumber();
+    static bool arquivoExiste(std::string nomeArquivo);
 };
 
 

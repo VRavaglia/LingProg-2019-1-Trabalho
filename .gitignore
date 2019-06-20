@@ -16,3 +16,5 @@ main
 valgrind-out\.txt
 
 valgrind-out02\.txt
+
+a

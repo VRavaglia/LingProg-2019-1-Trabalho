@@ -330,6 +330,8 @@ sub configuraAparencia{
     my @aparenciaLvl2O = converteLvl2(@aparenciaBaseO);
     $aparencias[1][2] = \@aparenciaLvl2O;
 
+    return 0;
+
     my @aparenciasStrings;
     my $n = 0;
 

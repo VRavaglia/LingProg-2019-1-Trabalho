@@ -1,13 +1,10 @@
 #include <iostream>
 #include <limits>
+#include <sstream>
 #include "Menu.h"
 #include "perlWrapper.h"
+#include "InputManager.h"
 
-bool arquivoExiste(string nomeArquivo) {
-    ifstream f(nomeArquivo.c_str());
-    return f.good();
-
-}
 
 Menu::Menu(Engine &engine) {
     string opcao;
@@ -19,136 +16,147 @@ Menu::Menu(Engine &engine) {
 
     string nomeArquivo;
 
-    if(emDebug){
+    if(true){
         nomeArquivo = "dadosTeste.txt";
     }
     else{
         cout << "Insira o nome do arquivo em que estao contidas as pontuacoes:" << endl;
         cout << "Caso o arquivo nao exista, um novo sera criado." << endl;
-        cin >> nomeArquivo;
-        if(!arquivoExiste(nomeArquivo)){
+        getline(cin, nomeArquivo);
+        if(!InputManager::arquivoExiste(nomeArquivo)){
             std::ofstream arquivo (nomeArquivo);
         }
     }
 
-    
-
     while(!sair){
         exibe();
-        getline(cin, opcao, '\n');
+        getline(cin,opcao);
         string nome;
         int status;
         vector<pair<string, unsigned>> pontuacoes;
         vector<unsigned>  listaPontos;
         unsigned dificuldade;
         vector<tuple<string, unsigned, float>> perfis;
-
+        if(opcao.size() > 1){
+            opcao = "-1";
+        }
+        string temp;
+        int erro;
         switch (opcao[0]){
-            case '0':
+            case '0': {
                 sair = true;
                 break;
-            case '1':
+            }
+            case '1':{
                 cout << "Insira a dificuldade inicial: " << endl;
+                dificuldade = abs(InputManager::getNumber());
 
-                cin >> dificuldade;
-
-                if(engine.inicializaSprites()){
-                    msgAdicional = "Erro na leitura das aparencias.";
+                if(dificuldade == 0){
+                    msgAdicional = "Dificuldade nao foi entendida.";
+                    break;
+                }
+                erro = engine.inicializaSprites();
+                if(erro){
+                    msgAdicional = "Erro na leitura das aparencias. Erro: " + to_string(erro);
                 }
                 else{
                     engine.novoJogo(nomeArquivo, dificuldade,0);
                 }
 
                 break;
-            case '2':
+            }
+            case '2': {
                 cout << "Pontuacoes contidas no arquivo " << nomeArquivo << endl;
                 perfis = pw.vetorPalavras(nomeArquivo);
-                for(auto perfil : perfis){
-                    if(get<2>(perfil) != -1){
-                        cout << "Nome: |" << get<0>(perfil) << "| Pontuacao: |" << get<1>(perfil) << "| Dificuldade: |" << get<2>(perfil) << "|\n";
+                for (auto perfil : perfis) {
+                    if (get<2>(perfil) != -1) {
+                        cout << "Nome: |" << get<0>(perfil) << "| Pontuacao: |" << get<1>(perfil) << "| Dificuldade: |"
+                             << get<2>(perfil) << "|\n";
                     }
                 }
                 cout << "Insira o nome do perfil: " << endl;
-                cin >> nome;
+                getline(cin, nome);
                 cout << "Insira a dificuldade do perfil: " << endl;
-                float dificuldadeP;
-                cin >> dificuldadeP;
+                float dificuldadeP = abs(InputManager::getNumber());
                 unsigned pontuacao;
-                if(pw.leJogo(nome, dificuldadeP, nomeArquivo, pontuacao)){
-                    msgAdicional = "Erro na leitura do perfil: " + to_string(pw.leJogo(nome, dificuldadeP, nomeArquivo, pontuacao));
-                } else{
-                    if(engine.inicializaSprites()){
+                if (pw.leJogo(nome, dificuldadeP, nomeArquivo, pontuacao)) {
+                    msgAdicional = "Erro na leitura do perfil: " +
+                                   to_string(pw.leJogo(nome, dificuldadeP, nomeArquivo, pontuacao));
+                } else {
+                    if (engine.inicializaSprites()) {
                         msgAdicional = "Erro na leitura das aparencias.";
-                    }
-                    else{
+                    } else {
                         engine.carregaJogo(nomeArquivo, dificuldadeP, pontuacao);
                     }
                 }
-
-
                 break;
-            case '3':
+            }
+            case '3': {
                 cout << "Insira o numero maximo de pontuacoes listadas: " << endl;
-                unsigned max;
-                cin >> max;
+                unsigned max = abs(InputManager::getNumber());
 
-                status =  pw.listaPontuacoesMaiores(nomeArquivo, max, pontuacoes);
-                if(status){
+                status = pw.listaPontuacoesMaiores(nomeArquivo, max, pontuacoes);
+                if (status) {
                     msgAdicional = "Erro na leitura dos arquivo de pontuacoes.";
-                }
-                else{
-                    for(auto &par : pontuacoes){
+                } else {
+                    for (auto &par : pontuacoes) {
                         cout << "Perfil: " << par.first << " | Pontuacao: " << par.second << endl;
                     }
+                    InputManager::getkeyPause();
                     pressioneEnter();
                 }
                 break;
-
-            case '4':
+            }
+            case '4': {
                 cout << "Insira o nome do perfil: " << endl;
-                cin >> nome;
+                getline(cin, nome);
                 cout << "Digite o codigo de restricao que define o tipo de procura pelo nome do perfil:\n";
                 cout << "1 -> Case insensitive e troca de simbolos por letras comuns\n";
                 cout << "2 -> Apenas case insensitive\n";
                 cout << "3 -> Nome exato\n";
-                unsigned restricao;
-                cin >> restricao;
-                status = pw.listaPontuacoesJogador(nome, restricao, nomeArquivo, listaPontos);
-                if(status){
-                    msgAdicional = "Erro na leitura dos arquivo de pontuacoes.";
+                unsigned restricao = abs(InputManager::getNumber());
+                if (restricao != 1 && restricao != 2 && restricao != 3){
+                    msgAdicional = "Restricao nao entendida.";
+                    break;
                 }
-                else {
+                status = pw.listaPontuacoesJogador(nome, restricao, nomeArquivo, listaPontos);
+                if (status) {
+                    msgAdicional = "Erro na leitura dos arquivo de pontuacoes.";
+                } else {
                     cout << "Pontuacoes obtidas pelo jogador " << nome << ": " << endl;
                     for (auto &ponto : listaPontos) {
                         cout << ponto << endl;
                     }
+                    InputManager::getkeyPause();
                     pressioneEnter();
                 }
                 break;
-
-            case '5':
+            }
+            case '5': {
                 perfis = pw.vetorPalavras(nomeArquivo);
-                for(auto perfil : perfis){
-                    if(get<2>(perfil) != -1){
-                        cout << "Nome: |" << get<0>(perfil) << "| Pontuacao: |" << get<1>(perfil) << "| Dificuldade: |" << get<2>(perfil) << "|\n";
+                for (auto perfil : perfis) {
+                    if (get<2>(perfil) != -1) {
+                        cout << "Nome: |" << get<0>(perfil) << "| Pontuacao: |" << get<1>(perfil) << "| Dificuldade: |"
+                             << get<2>(perfil) << "|\n";
                     }
                 }
                 pressioneEnter();
 
                 break;
-
-            case '6':
+            }
+            case '6': {
                 cout << "Insira o nome do arquivo em que estao contidas as pontuacoes:" << endl;
                 cout << "Caso o arquivo nao exista, um novo sera criado." << endl;
-                cin >> nomeArquivo;
-                if(!arquivoExiste(nomeArquivo)){
-                    std::ofstream arquivo (nomeArquivo);
+                getline(cin, nomeArquivo);
+                if (!InputManager::arquivoExiste(nomeArquivo)) {
+                    std::ofstream arquivo(nomeArquivo);
                 }
                 break;
-
-            default:
+            }
+            default: {
                 msgAdicional = "A entrada nao foi entendida.";
                 break;
+            }
         }
     }
 }
