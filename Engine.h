@@ -9,8 +9,8 @@
 
 void pressioneEnter();
 
-
-enum Status{rodando, sair, pausado};
+/// Defini se o jogo ja acabou
+enum Status{rodando, sair};
 
 /// Classe que controla o andamento do jogo
 class Engine {
@@ -21,12 +21,15 @@ public:
 
     /// Velocidade de reprodução do jogo
     float escalaDeTempo;
+
+    /// Fator que altera a velocidade vertical simulando a gravidade
     float gravidade;
 
+    /// Adiciona ou remove entidades do jogo
     void addEntidade(Entidade *entidade);
     void removeEntidade(Entidade *entidade);
 
-    /// Jogo em si
+    /// Jogo em si, criado com base nas informacoes do jogar
     void novoJogo(string nomeArquivo, float dificuldade, unsigned pontos);
     void carregaJogo(string nomeArquivo, float dificuldadeP, unsigned pontuacao);
 
@@ -65,6 +68,7 @@ private:
     /// Chamada quando uma entidade se encontra fora da tela
     void emForaDaTela(Entidade *entidade);
 
+    /// Conjunto de sprites que serao escritos na tela a cada instante
     ListaSprites batch;
 
     /// Frequência de atualização do jogo (tentativa de fps)
@@ -82,9 +86,10 @@ private:
     /// Salva a pontuacao final em caso de derrota
     int appendSave(string nomeArquivo, string perfil,  unsigned pontuacao);
 
-
+    /// Pontuacao que sera salva
     unsigned pontos;
 
+    /// Arquivo contendo as pontuacoes
     string nomeArquivoDados;
 
 };

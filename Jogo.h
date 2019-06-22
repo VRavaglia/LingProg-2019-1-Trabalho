@@ -8,9 +8,11 @@
 #define TRABALHO_JOGO_H
 
 
-
+/// Conjunto de metodos que atuam no jogo
 class Jogo {
 public:
+
+    /// Cria uma instancia com ou sem uma dificuldade definida
     Jogo() = default;
     Jogo(unsigned dificuldade);
 
@@ -24,7 +26,7 @@ public:
     void criaPlayer(Engine &engine);
 
 private:
-    // Fase do jogo
+    // Fase do jogo que controla as aparencias
     int lvl;
 };
 

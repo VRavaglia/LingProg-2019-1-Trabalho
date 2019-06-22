@@ -7,6 +7,8 @@
 #include "Engine.h"
 #include "VariaveisConfig.h"
 
+
+/// Menu exibido para selecao de opcoes
 class Menu {
 public:
     explicit Menu(Engine &engine);

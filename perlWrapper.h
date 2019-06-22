@@ -12,6 +12,7 @@
 
 using namespace std;
 
+/// Classe que cuida da interacao entre Perl e C++
 class perlWrapper{
 public:
     perlWrapper();

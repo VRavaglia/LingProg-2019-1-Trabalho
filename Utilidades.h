@@ -8,7 +8,7 @@
 #include "VariaveisConfig.h"
 using namespace std;
 
-
+/// Simples vetor com valores x e y
 template <typename T>
 class vec2{
 public:
@@ -21,6 +21,7 @@ public:
     T y;
 };
 
+/// Checa se a variavel e um numero
 template<typename T>
 bool isNumber(T num){
     string tipo = typeid(num).name();

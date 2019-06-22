@@ -11,6 +11,7 @@ enum Componente {OBSTACULO = 2, COLISAO = 3, PLAYER = 5, GRAVIDADE = 7};
 /// Checa se um componente pertence a lista
 bool contemComponente(Componente componente, unsigned componentes);
 
+/// Conjunto de informacoes que compoem uma entidade
 class Entidade {
 public:
     Entidade();
@@ -38,6 +39,7 @@ private:
 
 };
 
+/// Classe derivade que contem alguns metodos especificos do jogador
 class Player: public Entidade{
     virtual void emColisao();
 };

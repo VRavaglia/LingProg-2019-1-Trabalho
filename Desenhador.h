@@ -8,20 +8,26 @@
 #include <iostream>
 #include "VariaveisConfig.h"
 
-/// Classe que armazena uma matriz de char para ser lido como um sprite
+/// Classe que armazena uma matriz de char para ser lido como um sprite (aparencia dos objetos)
 class Sprite{
+    /// Exibicao de um sprite na tela atraves do operador <<
     friend std::ostream & operator<<(std::ostream &out, Sprite &sprite);
 public:
-    ///Cria um sprite a partir de um arquivo texto, posições no espaço (x e y) e ordem em que vai ser desenhado (profundidade z)
+    /// Cria um sprite sem a informacao visual
     Sprite();
+
+    /// Cria um sprite a partir de um arquivo texto, posições no espaço (x e y) e ordem em que vai ser desenhado (profundidade z)
     Sprite(std::string &nomeArquivo, float x, float y, int z);
+
+    /// Em vez de um arquivo, utiliza uma matriz de char
     Sprite(std::vector <std::vector <char>> &sprite, float x, float y, int z);
 
+    /// Altera a aparencia
     void setSprite(std::vector <std::vector <char>> &sprite);
     void setSprite(std::string &arquivo);
+
+    /// Retorna a aparencia
     std::vector <std::vector <char>> getSprite();
-
-
 
     /// Retorna a largura
     size_t L();
@@ -100,8 +106,6 @@ public:
     unsigned maxY = 16;
 
 private:
-
-
 
     /// Matriz de caracteres
     std::vector <std::vector<char>> tela;
