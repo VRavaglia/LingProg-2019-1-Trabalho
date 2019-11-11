@@ -1,3 +1,5 @@
+# Soh serve para a parte 2, nao usar na parte 3, ignorar este arquivo.
+
 package GerenciamentoDeDados;
 use strict;
 use warnings FATAL => 'all';
